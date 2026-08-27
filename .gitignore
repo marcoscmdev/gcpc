@@ -1,0 +1,23 @@
+### macOS ###
+.DS_Store
+
+### Credenciales ###
+gcpc-backend/src/main/resources/application-dev.properties
+gcpc-backend/src/main/resources/application-*.properties
+
+### Node / React  ###
+gcpc-frontend/node_modules/
+gcpc-frontend/dist/
+gcpc-frontend/build/
+gcpc-frontend/.env
+
+### Maven ###
+target/
+
+### IntelliJ ###
+.idea/
+*.iml
+*.ipr
+
+### VSCode ###
+.vscode/
