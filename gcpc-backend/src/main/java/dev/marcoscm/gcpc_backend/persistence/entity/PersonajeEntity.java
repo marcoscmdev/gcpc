@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,6 +23,9 @@ public class PersonajeEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private TipoPersonaje tipo;
-    // relacion FK
+
     private Integer gcdCharacterId;
+
+    @OneToMany(mappedBy = "personaje", fetch = FetchType.LAZY)
+    private List<ComicPersonajeEntity> comicPersonajes;
 }

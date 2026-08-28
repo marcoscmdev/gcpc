@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,4 +24,7 @@ public class TomoEntity {
     private String editorial;
     @Column(name = "anio_edicion", columnDefinition = "SMALLINT")
     private Integer anhoEdicion;
+
+    @OneToMany(mappedBy = "tomo", fetch = FetchType.LAZY)
+    private List<ComicTomoEntity> comicTomos;
 }

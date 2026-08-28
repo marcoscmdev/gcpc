@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,7 +30,14 @@ public class ComicEntity {
     @Column(columnDefinition = "TEXT")
     private String notas;
 
-    //FK con gcd_issue
+
     @Column(nullable = true)
     private Integer gcdIssueId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "gcd_issue_id", insertable = false, updatable = false)
+    private GcdIssueEntity gcdIssue;
+
+    @OneToMany(mappedBy = "comic", fetch = FetchType.LAZY)
+    private List<ComicPersonajeEntity> comicPersonajes;
 }

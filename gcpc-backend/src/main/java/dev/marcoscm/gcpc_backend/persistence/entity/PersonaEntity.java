@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,5 +23,6 @@ public class PersonaEntity {
     private String nombre;
     private String localidad;
 
-
+    @OneToMany(mappedBy = "persona", fetch = FetchType.LAZY)
+    private List<ComicPersonaEntity> comicPersonas;
 }

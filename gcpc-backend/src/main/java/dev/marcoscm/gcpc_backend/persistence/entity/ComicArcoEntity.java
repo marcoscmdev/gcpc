@@ -11,22 +11,22 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "mi_comic_persona")
-@IdClass(ComicPersonaId.class)
-public class ComicPersonaEntity {
+@Table(name = "mi_comic_arco")
+@IdClass(ComicArcoId.class)
+public class ComicArcoEntity {
     @Id
+    @Column(name = "comic_id" )
     private Integer comicId;
     @Id
-    private Integer personaId;
-    @Id
-    @Enumerated(EnumType.STRING)
-    private RolEnum rol;
+    @Column(name = "arco_id" )
+    private Integer arcoId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comic_id", insertable = false, updatable = false)
     private ComicEntity comic;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "persona_id", insertable = false, updatable = false)
-    private PersonaEntity persona;
+    @JoinColumn(name = "arco_id", insertable = false, updatable = false)
+    private ArcoArgumentalEntity arco;
+
 }

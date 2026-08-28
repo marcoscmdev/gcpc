@@ -6,22 +6,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "mi_arco_argumental")
-public class ArcoArgumentalEntity {
+@Table(name = "gcd_series")
+public class GcdSeriesEntity {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(nullable = false)
-    private String nombre;
+    private String name;
 
-    @OneToMany(mappedBy = "arco", fetch = FetchType.LAZY)
-    private List<ComicArcoEntity> comicArcos;
+    @Column(name = "year_began")
+    private Integer yearBegan;
+
+    @Column(name = "year_ended")
+    private Integer yearEnded;
+
+    @Column(name = "publisher_id")
+    private Integer publisherId;
 }
