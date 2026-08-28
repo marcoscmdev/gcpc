@@ -1,4 +1,4 @@
-# GCPC — Gotham City Personal Collection
+# GCPC — Gotham Comics Personal Collection
 *by Marcos Castro*
 
 Aplicación personal para catalogar y consultar mi colección de cómics de Batman.
