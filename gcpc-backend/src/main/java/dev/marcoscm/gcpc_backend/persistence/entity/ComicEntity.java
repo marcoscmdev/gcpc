@@ -31,7 +31,7 @@ public class ComicEntity {
     private String notas;
 
 
-    @Column(nullable = true)
+    @Column(name = "gcd_issue_id")
     private Integer gcdIssueId;
 
     @ManyToOne(fetch = FetchType.LAZY)

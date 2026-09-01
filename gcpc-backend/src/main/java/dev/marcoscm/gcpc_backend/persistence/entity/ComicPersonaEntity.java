@@ -14,8 +14,10 @@ import lombok.Setter;
 @Table(name = "mi_comic_persona")
 @IdClass(ComicPersonaId.class)
 public class ComicPersonaEntity {
+    @Column(name = "comic_id")
     @Id
     private Integer comicId;
+    @Column(name = "persona_id")
     @Id
     private Integer personaId;
     @Id
