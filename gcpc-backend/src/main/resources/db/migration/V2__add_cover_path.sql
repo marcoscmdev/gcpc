@@ -1,0 +1,2 @@
+ALTER TABLE mi_tomo  ADD COLUMN cover_path VARCHAR(255) NULL;
+ALTER TABLE mi_comic ADD COLUMN cover_path VARCHAR(255) NULL;

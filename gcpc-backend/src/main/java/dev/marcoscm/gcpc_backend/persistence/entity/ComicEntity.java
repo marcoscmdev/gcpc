@@ -29,7 +29,8 @@ public class ComicEntity {
     private Integer ranking;
     @Column(columnDefinition = "TEXT")
     private String notas;
-
+    @Column(name = "cover_path")
+    private String coverPath;
 
     @Column(name = "gcd_issue_id")
     private Integer gcdIssueId;

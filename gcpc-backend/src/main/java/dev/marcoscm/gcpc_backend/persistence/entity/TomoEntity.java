@@ -24,7 +24,8 @@ public class TomoEntity {
     private String editorial;
     @Column(name = "anio_edicion", columnDefinition = "SMALLINT")
     private Integer anhoEdicion;
-
+    @Column(name = "cover_path")
+    private String coverPath;
     @OneToMany(mappedBy = "tomo", fetch = FetchType.LAZY)
     private List<ComicTomoEntity> comicTomos;
 }
