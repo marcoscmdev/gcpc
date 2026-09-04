@@ -3,7 +3,6 @@ package dev.marcoscm.gcpc_backend.controller;
 
 import dev.marcoscm.gcpc_backend.dto.TomoDetalleDto;
 import dev.marcoscm.gcpc_backend.dto.TomoResumenDto;
-import dev.marcoscm.gcpc_backend.persistence.entity.TomoEntity;
 import dev.marcoscm.gcpc_backend.service.TomoService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,4 +31,7 @@ private final TomoService tomoService;
     public TomoDetalleDto getTomoConComics(@PathVariable Integer id) {
         return tomoService.getTomoConComics(id);
     }
+
+
+
 }

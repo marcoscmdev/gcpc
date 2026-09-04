@@ -1,6 +1,7 @@
 package dev.marcoscm.gcpc_backend.service;
 
 import dev.marcoscm.gcpc_backend.dto.ComicResumenDto;
+import dev.marcoscm.gcpc_backend.dto.EtapaResumenDto;
 import dev.marcoscm.gcpc_backend.dto.TomoDetalleDto;
 import dev.marcoscm.gcpc_backend.dto.TomoResumenDto;
 import dev.marcoscm.gcpc_backend.persistence.entity.TomoEntity;
@@ -47,7 +48,10 @@ public class TomoService {
                         ct.getComic().getRanking(),
                         ct.getComic().getNotas(),
                         ct.getOrden(),
-                        ct.getComic().getCoverPath()
+                        ct.getComic().getCoverPath(),
+                        ct.getComic().getEtapa() != null
+                                ? new EtapaResumenDto(ct.getComic().getEtapa().getId(), ct.getComic().getEtapa().getNombre())
+                                : null
                 )).toList();
 
         return new TomoDetalleDto(
@@ -57,5 +61,6 @@ public class TomoService {
                 comics
         );
     }
+
 
 }

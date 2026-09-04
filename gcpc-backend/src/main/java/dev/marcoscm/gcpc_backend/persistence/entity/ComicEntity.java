@@ -35,6 +35,13 @@ public class ComicEntity {
     @Column(name = "gcd_issue_id")
     private Integer gcdIssueId;
 
+    @Column(name = "etapa_id")
+    private Integer etapaId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "etapa_id", insertable = false, updatable = false)
+    private EtapaEntity etapa;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "gcd_issue_id", insertable = false, updatable = false)
     private GcdIssueEntity gcdIssue;

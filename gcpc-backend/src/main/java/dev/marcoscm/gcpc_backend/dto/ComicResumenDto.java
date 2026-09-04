@@ -8,6 +8,7 @@ public record ComicResumenDto(
         Integer ranking,
         String notas,
         Integer orden,
-        String coverPath
+        String coverPath,
+        EtapaResumenDto etapa
 ) {
 }
