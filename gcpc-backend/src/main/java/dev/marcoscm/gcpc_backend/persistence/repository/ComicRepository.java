@@ -3,6 +3,7 @@ package dev.marcoscm.gcpc_backend.persistence.repository;
 import dev.marcoscm.gcpc_backend.persistence.entity.ComicEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
