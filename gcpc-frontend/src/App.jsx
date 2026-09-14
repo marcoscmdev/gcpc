@@ -1,18 +1,21 @@
 import './App.css'
 import { NavLink } from 'react-router-dom'
-import { Inicio } from './pages/inicio.jsx'
-import { Personajes } from './pages/personajes.jsx'
-import { Personas } from './pages/personas.jsx'
-import { Estilos } from './pages/estilos.jsx'
-import { Arcos } from './pages/arcos.jsx'
-import { Etapas } from './pages/etapas.jsx'
+import { Inicio } from './pages/Inicio.jsx'
+import { Personajes } from './pages/Personajes.jsx'
+import { Personas } from './pages/Personas.jsx'
+import { Estilos } from './pages/Estilos.jsx'
+import { Arcos } from './pages/Arcos.jsx'
+import { Etapas } from './pages/Etapas.jsx'
 import { Archivo } from './pages/Archivo.jsx'
 import { Routes, Route } from 'react-router-dom'
 function App() {
   
-
   return (
     <>
+    <h1>GCPC</h1>
+
+
+
      <Routes>
       <Route path="/Inicio" element={<Inicio />} />
       <Route path="/Personajes" element={<Personajes />} />
@@ -21,10 +24,8 @@ function App() {
       <Route path="/Arcos" element={<Arcos />} />
       <Route path="/Etapas" element={<Etapas />} />
       <Route path="/Archivo" element={<Archivo />} />
-
     </Routes>
 
-    <h1>GCPC</h1>
      <nav>
         <NavLink to="/Inicio">Inicio |</NavLink>
         <NavLink to="/Personajes">Personajes |</NavLink>
@@ -34,6 +35,7 @@ function App() {
         <NavLink to="/Etapas">Etapas |</NavLink>
         <NavLink to="/Archivo">Archivo |</NavLink>
       </nav>
+    
     </>
   )
 }
