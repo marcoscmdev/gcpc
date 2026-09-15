@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ComicRepository extends ListCrudRepository<ComicEntity, Integer> {
-    Optional<ComicEntity> findByGcdIssueId(Integer gcdIssueId);
+    List<ComicEntity> findByGcdIssueId(Integer gcdIssueId);
 
     @Query("SELECT c FROM ComicEntity c LEFT JOIN FETCH c.etapa")
     List<ComicEntity> findAllConEtapa();

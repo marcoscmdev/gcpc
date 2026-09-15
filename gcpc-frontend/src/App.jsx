@@ -25,7 +25,6 @@ function App() {
       <Route path="/Etapas" element={<Etapas />} />
       <Route path="/Archivo" element={<Archivo />} />
     </Routes>
-
      <nav>
         <NavLink to="/Inicio">Inicio |</NavLink>
         <NavLink to="/Personajes">Personajes |</NavLink>

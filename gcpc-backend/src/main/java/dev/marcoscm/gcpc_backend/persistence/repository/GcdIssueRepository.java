@@ -26,5 +26,5 @@ public interface GcdIssueRepository extends Repository<GcdIssueEntity, Integer> 
                                         @Param("hasta") Integer hasta);
 
 
-    Optional<GcdIssueEntity> findById(Integer id);
+    List<GcdIssueEntity> findById(Integer id);
 }

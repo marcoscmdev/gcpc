@@ -25,14 +25,14 @@ public class GcdSearchService {
                         issue.getSeries().getName(),
                         issue.getNumber(),
                         issue.getTitle(),
-                        comicRepository.findByGcdIssueId(issue.getId()).isPresent()
+                        !comicRepository.findByGcdIssueId(issue.getId()).isEmpty()
                 ))
                 .toList();
     }
 
     public List<ComicSearchResultDto>buscarporRango(String serie, Integer desde, Integer hasta){
         return gcdIssueRepository.buscarPorRango(serie, desde, hasta).stream().map(issue -> new ComicSearchResultDto(
-                issue.getId(), serie, issue.getNumber(), issue.getTitle(), comicRepository.findByGcdIssueId(issue.getId()).isPresent()
+                issue.getId(), serie, issue.getNumber(), issue.getTitle(), !comicRepository.findByGcdIssueId(issue.getId()).isEmpty()
         ) ).toList();
     }
 }
