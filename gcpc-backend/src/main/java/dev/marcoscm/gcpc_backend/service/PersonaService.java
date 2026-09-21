@@ -1,8 +1,11 @@
 package dev.marcoscm.gcpc_backend.service;
 
 import dev.marcoscm.gcpc_backend.dto.ComicConTomoDto;
+import dev.marcoscm.gcpc_backend.dto.PersonaConRolDto;
+import dev.marcoscm.gcpc_backend.dto.PersonaResumenDto;
 import dev.marcoscm.gcpc_backend.dto.TomoResumenDto;
 import dev.marcoscm.gcpc_backend.persistence.entity.ComicEntity;
+import dev.marcoscm.gcpc_backend.persistence.entity.RolEnum;
 import dev.marcoscm.gcpc_backend.persistence.repository.ComicPersonaRepository;
 import dev.marcoscm.gcpc_backend.persistence.repository.ComicTomoRepository;
 import dev.marcoscm.gcpc_backend.persistence.repository.PersonaRepository;
@@ -37,5 +40,19 @@ public class PersonaService {
                         ct.getTomo().getEditorial(), ct.getTomo().getAnhoEdicion(), ct.getTomo().getCoverPath()))
                 .toList();
         return new ComicConTomoDto(comic.getId(), comic.getNombre(), comic.getNumero(), comic.getAnho(), comic.getCoverPath(), tomos);
+    }
+
+    public List<PersonaResumenDto> getAllPersonas() {
+        return personaRepository.findAll().stream()
+                .map(p -> new PersonaResumenDto(p.getId(), p.getNombre(), p.getLocalidad()))
+                .toList();
+    }
+
+    public List<ComicConTomoDto> buscarComicsPorPersona(String nombre, List<RolEnum> roles) {
+        List<ComicEntity> comics = (roles == null || roles.isEmpty())
+                ? comicPersonaRepository.findComicsByPersonaNombre(nombre)
+                : comicPersonaRepository.findComicsByPersonaNombreYRol(nombre, roles);
+
+        return comics.stream().map(this::mapComicConTomos).toList();
     }
 }

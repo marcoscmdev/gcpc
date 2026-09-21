@@ -64,11 +64,12 @@ public class ComicService {
                         c.getAnho(),
                         c.getRanking(),
                         c.getNotas(),
-                        null, // orden no aplica aquí, solo tiene sentido dentro de un tomo
+                        null,
                         c.getCoverPath(),
                         c.getEtapa() != null
                                 ? new EtapaResumenDto(c.getEtapa().getId(), c.getEtapa().getNombre())
-                                : null
+                                : null,
+                        getPersonasDeComic(c.getId())
                 ))
                 .toList();
     }

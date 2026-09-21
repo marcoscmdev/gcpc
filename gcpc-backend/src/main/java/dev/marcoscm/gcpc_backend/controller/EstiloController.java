@@ -1,6 +1,7 @@
 package dev.marcoscm.gcpc_backend.controller;
 
 import dev.marcoscm.gcpc_backend.dto.ComicConTomoDto;
+import dev.marcoscm.gcpc_backend.dto.EstiloResumenDto;
 import dev.marcoscm.gcpc_backend.service.EstiloService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,5 +22,10 @@ public class EstiloController {
     @GetMapping("/buscar")
     public List<ComicConTomoDto> buscarPorNombre(@RequestParam String nombre){
         return estiloService.buscarComicsPorEstilo(nombre);
+    }
+
+    @GetMapping
+    public List<EstiloResumenDto> getAllEstilos(){
+        return estiloService.getAll();
     }
 }

@@ -3,6 +3,7 @@ package dev.marcoscm.gcpc_backend.persistence.repository;
 import dev.marcoscm.gcpc_backend.persistence.entity.ComicEntity;
 import dev.marcoscm.gcpc_backend.persistence.entity.ComicPersonaEntity;
 import dev.marcoscm.gcpc_backend.persistence.entity.ComicPersonaId;
+import dev.marcoscm.gcpc_backend.persistence.entity.RolEnum;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -16,4 +17,8 @@ public interface ComicPersonaRepository extends ListCrudRepository<ComicPersonaE
 
     @Query("SELECT DISTINCT cp.comic FROM ComicPersonaEntity cp WHERE cp.persona.nombre LIKE %:nombre%")
     List<ComicEntity> findComicsByPersonaNombre(@Param("nombre") String nombre);
+
+    @Query("SELECT DISTINCT cp.comic FROM ComicPersonaEntity cp WHERE cp.persona.nombre LIKE %:nombre% AND cp.rol IN :roles")
+    List<ComicEntity> findComicsByPersonaNombreYRol(@Param("nombre") String nombre, @Param("roles") List<RolEnum> roles);
+
 }

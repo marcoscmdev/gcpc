@@ -1,6 +1,8 @@
 package dev.marcoscm.gcpc_backend.controller;
 
 import dev.marcoscm.gcpc_backend.dto.ComicConTomoDto;
+import dev.marcoscm.gcpc_backend.dto.EtapaResumenDto;
+import dev.marcoscm.gcpc_backend.dto.PersonajeResumenDto;
 import dev.marcoscm.gcpc_backend.service.EtapaService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,4 +26,10 @@ public class EtapaController {
     public List<ComicConTomoDto> buscarComicsPorEtapa(@RequestParam String nombre){
         return etapaService.buscarComicsPorEtapa(nombre);
     }
+
+    @GetMapping
+    public List<EtapaResumenDto> getAllEtapas(){
+        return etapaService.getAll();
+    }
+
 }

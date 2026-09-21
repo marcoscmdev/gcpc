@@ -1,6 +1,7 @@
 package dev.marcoscm.gcpc_backend.service;
 
 import dev.marcoscm.gcpc_backend.dto.ComicConTomoDto;
+import dev.marcoscm.gcpc_backend.dto.PersonajeResumenDto;
 import dev.marcoscm.gcpc_backend.dto.TomoResumenDto;
 import dev.marcoscm.gcpc_backend.persistence.entity.ComicEntity;
 import dev.marcoscm.gcpc_backend.persistence.repository.ComicPersonajeRepository;
@@ -37,4 +38,9 @@ public class PersonajeService {
                 .toList();
     }
 
+    public List<PersonajeResumenDto> getAll() {
+        return personajeRepository.findAll().stream()
+                .map(p -> new PersonajeResumenDto(p.getId(), p.getNombre()))
+                .toList();
+    }
 }

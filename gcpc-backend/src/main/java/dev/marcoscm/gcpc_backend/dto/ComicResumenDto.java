@@ -1,5 +1,7 @@
 package dev.marcoscm.gcpc_backend.dto;
 
+import java.util.List;
+
 public record ComicResumenDto(
         Integer id,
         String nombre,
@@ -9,6 +11,7 @@ public record ComicResumenDto(
         String notas,
         Integer orden,
         String coverPath,
-        EtapaResumenDto etapa
+        EtapaResumenDto etapa,
+        List<PersonaConRolDto>personas
 ) {
 }

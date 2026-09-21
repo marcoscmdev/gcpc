@@ -1,5 +1,6 @@
 package dev.marcoscm.gcpc_backend.controller;
 
+import dev.marcoscm.gcpc_backend.dto.ArcoResumenDto;
 import dev.marcoscm.gcpc_backend.dto.ComicConTomoDto;
 import dev.marcoscm.gcpc_backend.persistence.entity.ArcoArgumentalEntity;
 import dev.marcoscm.gcpc_backend.service.ArcoArgumentalService;
@@ -20,7 +21,7 @@ public class ArcoArgumentalController {
     }
 
     @GetMapping
-    public List<ArcoArgumentalEntity> findAll() {
+    public List<ArcoResumenDto> findAll() {
         return arcoArgumentalService.getAll();
     }
 

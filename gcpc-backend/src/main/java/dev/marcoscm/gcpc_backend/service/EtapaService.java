@@ -1,6 +1,8 @@
 package dev.marcoscm.gcpc_backend.service;
 
 import dev.marcoscm.gcpc_backend.dto.ComicConTomoDto;
+import dev.marcoscm.gcpc_backend.dto.EtapaResumenDto;
+import dev.marcoscm.gcpc_backend.dto.PersonajeResumenDto;
 import dev.marcoscm.gcpc_backend.dto.TomoResumenDto;
 import dev.marcoscm.gcpc_backend.persistence.entity.ComicEntity;
 import dev.marcoscm.gcpc_backend.persistence.repository.ComicTomoRepository;
@@ -32,5 +34,11 @@ public class EtapaService {
         return etapaRepository.findByEtapaNombreConEtapa(nombre).stream().map(this::mapComicConTomo).toList();
     }
 
+
+    public List<EtapaResumenDto> getAll() {
+            return etapaRepository.findAll().stream()
+                    .map(p -> new EtapaResumenDto(p.getId(), p.getNombre()))
+                    .toList();
+        }
 
 }

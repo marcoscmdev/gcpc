@@ -1,6 +1,8 @@
 package dev.marcoscm.gcpc_backend.service;
 
+import dev.marcoscm.gcpc_backend.dto.ArcoResumenDto;
 import dev.marcoscm.gcpc_backend.dto.ComicConTomoDto;
+import dev.marcoscm.gcpc_backend.dto.EtapaResumenDto;
 import dev.marcoscm.gcpc_backend.dto.TomoResumenDto;
 import dev.marcoscm.gcpc_backend.persistence.entity.ArcoArgumentalEntity;
 import dev.marcoscm.gcpc_backend.persistence.entity.ComicArcoEntity;
@@ -25,8 +27,8 @@ public class ArcoArgumentalService {
         this.comicTomoRepository = comicTomoRepository;
     }
 
-    public List<ArcoArgumentalEntity> getAll() {
-        return arcoArgumentalRepository.findAll();
+    public List<ArcoResumenDto> getAll() {
+        return arcoArgumentalRepository.findAll().stream().map(p -> new ArcoResumenDto(p.getId(), p.getNombre())).toList();
     }
 
     public List<ComicEntity> getComicsDeArco(Integer arcoId) {

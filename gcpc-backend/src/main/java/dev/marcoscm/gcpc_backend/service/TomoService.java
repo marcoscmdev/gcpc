@@ -2,9 +2,11 @@ package dev.marcoscm.gcpc_backend.service;
 
 import dev.marcoscm.gcpc_backend.dto.ComicResumenDto;
 import dev.marcoscm.gcpc_backend.dto.EtapaResumenDto;
+import dev.marcoscm.gcpc_backend.dto.PersonaConRolDto;
 import dev.marcoscm.gcpc_backend.dto.TomoDetalleDto;
 import dev.marcoscm.gcpc_backend.dto.TomoResumenDto;
 import dev.marcoscm.gcpc_backend.persistence.entity.TomoEntity;
+import dev.marcoscm.gcpc_backend.persistence.repository.ComicPersonaRepository;
 import dev.marcoscm.gcpc_backend.persistence.repository.ComicRepository;
 import dev.marcoscm.gcpc_backend.persistence.repository.ComicTomoRepository;
 import dev.marcoscm.gcpc_backend.persistence.repository.TomoRepository;
@@ -18,13 +20,20 @@ public class TomoService {
     private final ComicRepository comicRepository;
     private final TomoRepository tomoRepository;
     private final ComicTomoRepository comicTomoRepository;
-
+    private final ComicPersonaRepository comicPersonaRepository;
 
     public TomoService(ComicRepository comicRepository, TomoRepository tomoRepository,
-                       ComicTomoRepository comicTomoRepository) {
+                       ComicTomoRepository comicTomoRepository, ComicPersonaRepository comicPersonaRepository) {
         this.comicRepository = comicRepository;
         this.tomoRepository = tomoRepository;
         this.comicTomoRepository = comicTomoRepository;
+        this.comicPersonaRepository = comicPersonaRepository;
+    }
+
+    private List<PersonaConRolDto> getPersonasDeComic(Integer comicId) {
+        return comicPersonaRepository.findByComicIdConPersona(comicId).stream()
+                .map(cp -> new PersonaConRolDto(cp.getPersona().getNombre(), cp.getRol().name()))
+                .toList();
     }
 
     public List<TomoResumenDto> getAll() {
@@ -51,7 +60,8 @@ public class TomoService {
                         ct.getComic().getCoverPath(),
                         ct.getComic().getEtapa() != null
                                 ? new EtapaResumenDto(ct.getComic().getEtapa().getId(), ct.getComic().getEtapa().getNombre())
-                                : null
+                                : null,
+                        getPersonasDeComic(ct.getComic().getId())
                 )).toList();
 
         return new TomoDetalleDto(
@@ -61,6 +71,4 @@ public class TomoService {
                 comics
         );
     }
-
-
 }
