@@ -21,4 +21,10 @@ public interface ComicPersonaRepository extends ListCrudRepository<ComicPersonaE
     @Query("SELECT DISTINCT cp.comic FROM ComicPersonaEntity cp WHERE cp.persona.nombre LIKE %:nombre% AND cp.rol IN :roles")
     List<ComicEntity> findComicsByPersonaNombreYRol(@Param("nombre") String nombre, @Param("roles") List<RolEnum> roles);
 
+    @Query("SELECT cp FROM ComicPersonaEntity cp JOIN FETCH cp.comic WHERE cp.persona.nombre LIKE %:nombre%")
+    List<ComicPersonaEntity> findFilasByPersonaNombre(@Param("nombre") String nombre);
+
+    @Query("SELECT cp FROM ComicPersonaEntity cp JOIN FETCH cp.comic WHERE cp.persona.nombre LIKE %:nombre% AND cp.rol IN :roles")
+    List<ComicPersonaEntity> findFilasByPersonaNombreYRol(@Param("nombre") String nombre, @Param("roles") List<RolEnum> roles);
+
 }

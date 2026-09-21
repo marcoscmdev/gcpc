@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react'
 
-const API_URL = 'http://localhost:8080'
-
 const ROLES = [
   { valor: 'GUION', etiqueta: 'Guionista' },
   { valor: 'DIBUJO', etiqueta: 'Dibujante' },
   { valor: 'COLOR', etiqueta: 'Colorista' },
+  {valor: 'ENTINTADO', etiqueta: 'Entintador' },
+  {valor: 'ROTULACION', etiqueta: 'Rotulador' },
 ]
-
 function Personas() {
 
   const [personas, setPersonas] = useState([])
@@ -17,8 +16,18 @@ function Personas() {
   const [comics, setComics] = useState([])
   const [buscado, setBuscado] = useState(false)
 
+  const comicsPorTomo = comics.reduce((acc, comic) => {
+  comic.tomos.forEach(tomo => {
+    if (!acc[tomo.id]) {
+      acc[tomo.id] = { tomo, comics: [] }
+    }
+    acc[tomo.id].comics.push(comic)
+  })
+  return acc
+}, {})
+
   useEffect(() => {
-    fetch(`${API_URL}/api/personas`)
+    fetch(`http://localhost:8080/api/personas`)
       .then(response => response.json())
       .then(data => setPersonas(data))
   }, [])
@@ -33,7 +42,7 @@ function Personas() {
     const params = new URLSearchParams({ nombre })
     roles.forEach(rol => params.append('roles', rol))
 
-    fetch(`${API_URL}/api/personas/buscar?${params.toString()}`)
+    fetch(`http://localhost:8080/api/personas/buscar?${params.toString()}`)
       .then(response => response.json())
       .then(data => {
         setComics(data)
@@ -58,6 +67,14 @@ function Personas() {
       buscarComics(texto, nuevosRoles)
     }
   }
+
+  function handleLimpiar() {
+  setTexto('')
+  setMostrarSugerencias(false)
+  setRolesSeleccionados([])
+  setComics([])
+  setBuscado(false)
+}
 
   return (
     <div>
@@ -96,16 +113,24 @@ function Personas() {
           </label>
         ))}
       </div>
+      <button onClick={handleLimpiar}>Limpiar</button>
 
-      {buscado && (
-        <ul>
-          {comics.map(comic => (
-            <li key={comic.id}>
-              {comic.nombre} #{comic.numero} ({comic.anho})
-            </li>
-          ))}
-        </ul>
-      )}
+       {buscado && (
+  comics.length === 0 ? (
+    <p>No se han encontrado cómics para esta persona </p>
+  ) : (
+    Object.values(comicsPorTomo).map(grupo => (
+      <div key={grupo.tomo.id}>
+        <h3>Tomo: {grupo.tomo.nombre}</h3>
+        {grupo.comics.map(comic => (
+          <p key={comic.id}>
+            {comic.nombre} #{comic.numero} ({comic.anho ? comic.anho : 'Año sin especificar'} {comic.roles.join(', ')})
+          </p>
+        ))}
+      </div>
+    ))
+  )
+)}
     </div>
   )
 }

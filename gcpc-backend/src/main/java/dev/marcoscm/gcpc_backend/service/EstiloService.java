@@ -29,7 +29,7 @@ public class EstiloService {
                 map(ct -> new TomoResumenDto(
                         ct.getTomo().getId(), ct.getTomo().getNombre(), ct.getTomo().getEditorial(), ct.getTomo().getAnhoEdicion(),
                         ct.getTomo().getCoverPath())).toList();
-        return new ComicConTomoDto(comic.getId(), comic.getNombre(), comic.getNumero(), comic.getAnho(), comic.getCoverPath(), tomos);
+        return new ComicConTomoDto(comic.getId(), comic.getNombre(), comic.getNumero(), comic.getAnho(), comic.getCoverPath(), List.of(), tomos);
     }
 
     public List<ComicConTomoDto> buscarComicsPorEstilo(String nombre){

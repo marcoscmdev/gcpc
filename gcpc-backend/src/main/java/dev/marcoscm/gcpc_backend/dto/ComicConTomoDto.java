@@ -8,6 +8,6 @@ public record ComicConTomoDto(
         String numero,
         Integer anho,
         String coverPath,
+        List<String> roles,
         List<TomoResumenDto> tomos
-) {
-}
+) {}
