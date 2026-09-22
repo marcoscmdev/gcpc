@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { API_URL } from "../config.js";
 
 function Inicio() {
   const [tomos, setTomos] = useState([]);
@@ -8,6 +9,18 @@ function Inicio() {
   const [busqueda, setBusqueda] = useState("");
   const [cargandoTomos, setCargandoTomos] = useState(true);
   const [cargandoComics, setCargandoComics] = useState(true);
+  const [error, setError] = useState(null);
+
+  function manejarRespuesta(response) {
+    if (!response.ok) {
+      return response.json()
+        .catch(() => ({}))
+        .then((body) => {
+          throw { codigo: response.status, mensaje: body.message || body.error || "Error desconocido" };
+        });
+    }
+    return response.json();
+  }
 
   const resultadoTomos = tomos.filter((tomo) =>
     tomo.nombre.toLowerCase().includes(busqueda.toLowerCase()),
@@ -17,16 +30,18 @@ function Inicio() {
   );
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/tomos")
-      .then((response) => response.json())
+    fetch(`${API_URL}/api/tomos`)
+      .then(manejarRespuesta)
       .then((data) => setTomos(data))
+      .catch((err) => setError(err.codigo ? err : { codigo: "—", mensaje: "No se pudo conectar con el servidor" }))
       .finally(() => setCargandoTomos(false));
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/comics")
-      .then((response) => response.json())
+    fetch(`${API_URL}/api/comics`)
+      .then(manejarRespuesta)
       .then((data) => setComics(data))
+      .catch((err) => setError(err.codigo ? err : { codigo: "—", mensaje: "No se pudo conectar con el servidor" }))
       .finally(() => setCargandoComics(false));
   }, []);
 
@@ -35,6 +50,14 @@ function Inicio() {
       <h1>Inicio</h1>
 
       {(cargandoTomos || cargandoComics) && <h4>Cargando...</h4>}
+
+      {error && (
+        <div>
+          <h2>Error</h2>
+          <p>Código: {error.codigo}</p>
+          <p>{error.mensaje}</p>
+        </div>
+      )}
       <input
         type="text"
         placeholder="Buscar..."

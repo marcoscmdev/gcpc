@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { API_URL } from "../config.js";
 
 function Archivo() {
   const [serie, setSerie] = useState("");
@@ -7,20 +8,34 @@ function Archivo() {
   const [resultados, setResultados] = useState([]);
   const [buscado, setBuscado] = useState(false);
   const [cargando, setCargando] = useState(false);
+  const [error, setError] = useState(null);
+
+  function manejarRespuesta(response) {
+    if (!response.ok) {
+      return response.json()
+        .catch(() => ({}))
+        .then((body) => {
+          throw { codigo: response.status, mensaje: body.message || body.error || "Error desconocido" };
+        });
+    }
+    return response.json();
+  }
 
   function handleBuscar() {
-    let url = `http://localhost:8080/api/gcd/buscar?serie=${encodeURIComponent(serie)}`;
+    let url = `${API_URL}/api/gcd/buscar?serie=${encodeURIComponent(serie)}`;
     if (numero) {
       url += `&numero=${encodeURIComponent(numero)}`;
     }
 
     setCargando(true);
+    setError(null);
     fetch(url)
-      .then((response) => response.json())
+      .then(manejarRespuesta)
       .then((data) => {
         setResultados(data);
         setBuscado(true);
       })
+      .catch((err) => setError(err.codigo ? err : { codigo: "—", mensaje: "No se pudo conectar con el servidor" }))
       .finally(() => setCargando(false));
     }
     
@@ -42,6 +57,14 @@ function Archivo() {
         <button onClick={handleBuscar}>Buscar</button>
 
         {cargando && <h4>Buscando...</h4>}
+
+        {error && (
+          <div>
+            <h2>Error</h2>
+            <p>Código: {error.codigo}</p>
+            <p>{error.mensaje}</p>
+          </div>
+        )}
 
         {buscado && !cargando &&
           (resultados.length === 0 ? (

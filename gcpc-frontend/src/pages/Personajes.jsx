@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { API_URL } from '../config.js'
 
 function Personajes() {
   const [personajes, setPersonajes] = useState([])
@@ -6,6 +7,18 @@ function Personajes() {
   const [comics, setComics] = useState([])
   const [buscado, setBuscado] = useState(false)
   const [cargando, setCargando] = useState(false)
+  const [error, setError] = useState(null)
+
+  function manejarRespuesta(response) {
+    if (!response.ok) {
+      return response.json()
+        .catch(() => ({}))
+        .then(body => {
+          throw { codigo: response.status, mensaje: body.message || body.error || 'Error desconocido' }
+        })
+    }
+    return response.json()
+  }
      const comicsPorTomo = comics.reduce((grupos, comic) => {
   comic.tomos.forEach(tomo => {
     if (!grupos[tomo.id]) {
@@ -18,20 +31,23 @@ function Personajes() {
 
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/personajes')
-      .then(response => response.json())
+    fetch(`${API_URL}/api/personajes`)
+      .then(manejarRespuesta)
       .then(data => setPersonajes(data))
+      .catch(err => setError(err.codigo ? err : { codigo: '—', mensaje: 'No se pudo conectar con el servidor' }))
   }, [])
 
   function handleSeleccionar(personaje) {
     setSeleccionado(personaje.id)
     setCargando(true)
-    fetch(`http://localhost:8080/api/personajes/buscar?nombre=${encodeURIComponent(personaje.nombre)}`)
-      .then(response => response.json())
+    setError(null)
+    fetch(`${API_URL}/api/personajes/buscar?nombre=${encodeURIComponent(personaje.nombre)}`)
+      .then(manejarRespuesta)
       .then(data => {
         setComics(data)
         setBuscado(true)
       })
+      .catch(err => setError(err.codigo ? err : { codigo: '—', mensaje: 'No se pudo conectar con el servidor' }))
       .finally(() => setCargando(false))
   }
 
@@ -63,7 +79,15 @@ function Personajes() {
 
       {cargando && <h4>Buscando...</h4>}
 
-      {buscado && !cargando && (
+      {error && (
+       <div>
+         <h2>Error</h2>
+         <p>Código: {error.codigo}</p>
+         <p>{error.mensaje}</p>
+       </div>
+     )}
+
+     {buscado && !cargando && (
         comics.length === 0 ? (
           <p>No se han encontrado cómics de este personaje</p>
         ) : (

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { API_URL } from '../config.js'
 
 function Etapas() {
   const [etapas, setEtapas] = useState([])
@@ -6,6 +7,18 @@ function Etapas() {
   const [comics, setComics] = useState([])
   const [buscado, setBuscado] = useState(false)
   const [cargando, setCargando] = useState(false)
+  const [error, setError] = useState(null)
+
+  function manejarRespuesta(response) {
+    if (!response.ok) {
+      return response.json()
+        .catch(() => ({}))
+        .then(body => {
+          throw { codigo: response.status, mensaje: body.message || body.error || 'Error desconocido' }
+        })
+    }
+    return response.json()
+  }
 
   const comicsPorTomo = comics.reduce((grupos, comic) => {
   comic.tomos.forEach(tomo => {
@@ -18,20 +31,23 @@ function Etapas() {
 }, {})
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/etapas')
-      .then(response => response.json())
+    fetch(`${API_URL}/api/etapas`)
+      .then(manejarRespuesta)
       .then(data => setEtapas(data))
+      .catch(err => setError(err.codigo ? err : { codigo: '—', mensaje: 'No se pudo conectar con el servidor' }))
   }, [])
 
   function handleSeleccionar(etapa) {
     setSeleccionado(etapa.id)
     setCargando(true)
-    fetch(`http://localhost:8080/api/etapas/buscar?nombre=${encodeURIComponent(etapa.nombre)}`)
-      .then(response => response.json())
+    setError(null)
+    fetch(`${API_URL}/api/etapas/buscar?nombre=${encodeURIComponent(etapa.nombre)}`)
+      .then(manejarRespuesta)
       .then(data => {
         setComics(data)
         setBuscado(true)
       })
+      .catch(err => setError(err.codigo ? err : { codigo: '—', mensaje: 'No se pudo conectar con el servidor' }))
       .finally(() => setCargando(false))
   }
 
@@ -62,6 +78,14 @@ function Etapas() {
 
 
      {cargando && <h4>Buscando...</h4>}
+     {error && (
+       <div>
+         <h2>Error</h2>
+         <p>Código: {error.codigo}</p>
+         <p>{error.mensaje}</p>
+       </div>
+     )}
+
      {buscado && !cargando && (
   comics.length === 0 ? (
     <p>No se han encontrado cómics de esta etapa</p>

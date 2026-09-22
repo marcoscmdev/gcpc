@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { API_URL } from '../config.js'
 
 const ROLES = [
   { valor: 'GUION', etiqueta: 'Guionista' },
@@ -27,9 +28,10 @@ function Personas() {
 }, {})
 
   useEffect(() => {
-    fetch(`http://localhost:8080/api/personas`)
-      .then(response => response.json())
+    fetch(`${API_URL}/api/personas`)
+      .then(manejarRespuesta)
       .then(data => setPersonas(data))
+      .catch(err => setError(err.codigo ? err : { codigo: '—', mensaje: 'No se pudo conectar con el servidor' }))
   }, [])
 
   const sugerencias = texto
@@ -40,17 +42,32 @@ function Personas() {
 
   const [cargando, setCargando] = useState(false)
 
+const [error, setError] = useState(null)
+
+function manejarRespuesta(response) {
+  if (!response.ok) {
+    return response.json()
+      .catch(() => ({}))
+      .then(body => {
+        throw { codigo: response.status, mensaje: body.message || body.error || 'Error desconocido' }
+      })
+  }
+  return response.json()
+}
+
 function buscarComics(nombre, roles) {
   const params = new URLSearchParams({ nombre })
   roles.forEach(rol => params.append('roles', rol))
 
   setCargando(true)
-  fetch(`http://localhost:8080/api/personas/buscar?${params.toString()}`)
-    .then(response => response.json())
+  setError(null)
+  fetch(`${API_URL}/api/personas/buscar?${params.toString()}`)
+    .then(manejarRespuesta)
     .then(data => {
       setComics(data)
       setBuscado(true)
     })
+    .catch(err => setError(err.codigo ? err : { codigo: '—', mensaje: 'No se pudo conectar con el servidor' }))
     .finally(() => setCargando(false))
 }
 
@@ -121,6 +138,14 @@ function buscarComics(nombre, roles) {
 
        {cargando && <h4>Buscando...</h4>}
 
+{error && (
+  <div>
+    <h2>Error</h2>
+    <p>Código: {error.codigo}</p>
+    <p>{error.mensaje}</p>
+  </div>
+)}
+
 {buscado && !cargando &&(
   comics.length === 0 ? (
     <p>No se han encontrado cómics para esta persona </p>
@@ -129,7 +154,7 @@ function buscarComics(nombre, roles) {
       <div key={grupo.tomo.id}>
         <h3>Tomo: {grupo.tomo.nombre}</h3>
          {grupo.tomo.coverPath ? (
-            <img src={grupo.tomo.coverPath} alt={tomo.nombre} />
+            <img src={grupo.tomo.coverPath} alt={grupo.tomo.nombre} />
           ) : (
             <img src= "/img/portada-generica.jpg" alt="Sin portada" />
           )}
