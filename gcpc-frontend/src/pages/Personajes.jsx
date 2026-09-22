@@ -5,6 +5,7 @@ function Personajes() {
   const [seleccionado, setSeleccionado] = useState(null)
   const [comics, setComics] = useState([])
   const [buscado, setBuscado] = useState(false)
+  const [cargando, setCargando] = useState(false)
      const comicsPorTomo = comics.reduce((grupos, comic) => {
   comic.tomos.forEach(tomo => {
     if (!grupos[tomo.id]) {
@@ -24,12 +25,14 @@ function Personajes() {
 
   function handleSeleccionar(personaje) {
     setSeleccionado(personaje.id)
+    setCargando(true)
     fetch(`http://localhost:8080/api/personajes/buscar?nombre=${encodeURIComponent(personaje.nombre)}`)
       .then(response => response.json())
       .then(data => {
         setComics(data)
         setBuscado(true)
       })
+      .finally(() => setCargando(false))
   }
 
   function handleQuitarSeleccion() {
@@ -58,13 +61,20 @@ function Personajes() {
       </div>
 
 
-      {buscado && (
+      {cargando && <h4>Buscando...</h4>}
+
+      {buscado && !cargando && (
         comics.length === 0 ? (
           <p>No se han encontrado cómics de este personaje</p>
         ) : (
     Object.values(comicsPorTomo).map(grupo => (
       <div key={grupo.tomo.id}>
         <h3>Tomo: {grupo.tomo.nombre}</h3>
+         {grupo.tomo.coverPath ? (
+            <img src={grupo.tomo.coverPath} alt={grupo.tomo.nombre} />
+          ) : (
+            <img src= "/img/portada-generica.jpg" alt="Sin portada" />
+          )}
         {grupo.comics.map(comic => (
           <p key={comic.id}>
             {comic.nombre} #{comic.numero} ({comic.anho ? comic.anho : 'Año sin especificar'})

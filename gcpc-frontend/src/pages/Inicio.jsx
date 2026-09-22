@@ -6,6 +6,8 @@ function Inicio() {
   const [comics, setComics] = useState([]);
 
   const [busqueda, setBusqueda] = useState("");
+  const [cargandoTomos, setCargandoTomos] = useState(true);
+  const [cargandoComics, setCargandoComics] = useState(true);
 
   const resultadoTomos = tomos.filter((tomo) =>
     tomo.nombre.toLowerCase().includes(busqueda.toLowerCase()),
@@ -17,18 +19,22 @@ function Inicio() {
   useEffect(() => {
     fetch("http://localhost:8080/api/tomos")
       .then((response) => response.json())
-      .then((data) => setTomos(data));
+      .then((data) => setTomos(data))
+      .finally(() => setCargandoTomos(false));
   }, []);
 
   useEffect(() => {
     fetch("http://localhost:8080/api/comics")
       .then((response) => response.json())
-      .then((data) => setComics(data));
+      .then((data) => setComics(data))
+      .finally(() => setCargandoComics(false));
   }, []);
 
   return (
     <div>
       <h1>Inicio</h1>
+
+      {(cargandoTomos || cargandoComics) && <h4>Cargando...</h4>}
       <input
         type="text"
         placeholder="Buscar..."
@@ -48,7 +54,7 @@ function Inicio() {
           {tomo.coverPath ? (
             <img src={tomo.coverPath} alt={tomo.nombre} />
           ) : (
-            <p>Sin portada</p>
+            <img src= "/img/portada-generica.jpg" alt="Sin portada" />
           )}
           <p>{tomo.editorial} — {tomo.anhoEdicion}</p>
         </div>
@@ -65,7 +71,7 @@ function Inicio() {
           {comic.coverPath ? (
             <img src={comic.coverPath} alt={comic.nombre} />
           ) : (
-            <p>Sin portada</p>
+            <img src= "/img/portada-generica.jpg" alt="Sin portada" />
           )}
           <p>Año {comic.anho}{comic.etapa ? ` — ${comic.etapa.nombre}` : ''}</p>
         </div>
@@ -82,7 +88,7 @@ function Inicio() {
           {tomo.coverPath ? (
             <img src={tomo.coverPath} alt={tomo.nombre} />
           ) : (
-            <p>Sin portada</p>
+            <img src= "/img/portada-generica.jpg" alt="Sin portada" />
           )}
           <p>
             {tomo.editorial} — {tomo.anhoEdicion}
