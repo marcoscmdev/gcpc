@@ -7,6 +7,7 @@ import { Estilos } from './pages/Estilos.jsx'
 import { Arcos } from './pages/Arcos.jsx'
 import { Etapas } from './pages/Etapas.jsx'
 import { Archivo } from './pages/Archivo.jsx'
+import { TomoDetalle } from './pages/TomoDetalle.jsx'
 import { Routes, Route } from 'react-router-dom'
 function App() {
   
@@ -24,6 +25,7 @@ function App() {
       <Route path="/Arcos" element={<Arcos />} />
       <Route path="/Etapas" element={<Etapas />} />
       <Route path="/Archivo" element={<Archivo />} />
+      <Route path="/tomos/:id" element={<TomoDetalle />} />
     </Routes>
      <nav>
         <NavLink to="/Inicio">Inicio |</NavLink>

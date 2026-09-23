@@ -6,6 +6,7 @@ import dev.marcoscm.gcpc_backend.dto.TomoResumenDto;
 import dev.marcoscm.gcpc_backend.service.TomoService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,6 +31,11 @@ private final TomoService tomoService;
     @GetMapping("/{id}")
     public TomoDetalleDto getTomoConComics(@PathVariable Integer id) {
         return tomoService.getTomoConComics(id);
+    }
+
+    @GetMapping("/buscar-curiosidades")
+    public List<TomoResumenDto> buscarPorCuriosidades(@RequestParam String texto) {
+        return tomoService.buscarPorCuriosidades(texto);
     }
 
 

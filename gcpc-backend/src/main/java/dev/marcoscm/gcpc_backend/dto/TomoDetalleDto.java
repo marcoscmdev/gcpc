@@ -9,6 +9,9 @@ public record TomoDetalleDto(
         String editorial,
         Integer anhoEdicion,
         String coverPath,
-        List<ComicResumenDto> comicsContiene
+        List<ComicDeTomoDto> comicsContiene,
+        Integer ranking,
+        String notas,
+        String curiosidades
 ) {
 }

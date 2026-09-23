@@ -1,0 +1,4 @@
+ALTER TABLE mi_tomo
+  ADD COLUMN ranking TINYINT NULL,
+  ADD COLUMN notas TEXT NULL,
+  ADD COLUMN curiosidades TEXT NULL;

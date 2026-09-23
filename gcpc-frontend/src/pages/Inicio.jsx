@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { API_URL } from "../config.js";
 
 function Inicio() {
@@ -73,7 +74,7 @@ function Inicio() {
     ) : (
       resultadoTomos.map(tomo => (
         <div key={tomo.id}>
-          <h3>{tomo.nombre}</h3>
+          <h3><Link to={`/tomos/${tomo.id}`}>{tomo.nombre}</Link></h3>
           {tomo.coverPath ? (
             <img src={tomo.coverPath} alt={tomo.nombre} />
           ) : (
@@ -107,7 +108,7 @@ function Inicio() {
       <h3>Últimos tomos añadidos</h3>
       {tomos.slice(0, 3).map((tomo) => (
         <div key={tomo.id}>
-          <h3>{tomo.nombre}</h3>
+          <h3><Link to={`/tomos/${tomo.id}`}>{tomo.nombre}</Link></h3>
           {tomo.coverPath ? (
             <img src={tomo.coverPath} alt={tomo.nombre} />
           ) : (

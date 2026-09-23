@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { API_URL } from '../config.js'
 
 function Etapas() {
@@ -92,7 +93,7 @@ function Etapas() {
   ) : (
     Object.values(comicsPorTomo).map(grupo => (
       <div key={grupo.tomo.id}>
-        <h3>Tomo: {grupo.tomo.nombre}</h3>
+        <h3>Tomo: <Link to={`/tomos/${grupo.tomo.id}`}>{grupo.tomo.nombre}</Link></h3>
           {grupo.tomo.coverPath ? (
             <img src={grupo.tomo.coverPath} alt={grupo.tomo.nombre} />
           ) : (
