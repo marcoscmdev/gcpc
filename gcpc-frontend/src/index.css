@@ -1,13 +1,32 @@
 @import "tailwindcss";
+@import '@fontsource/oswald/500.css';
+@import '@fontsource/oswald/700.css';
+@import '@fontsource/barlow/400.css';
 
 @theme {
-  --font-sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --color-brand-navy: #0f1b3d;
-  --color-brand-belt: #f2c744;
-  --color-bg: #18181b;
-  --color-surface: #27272a;
-  --color-text: #e4e4e7;
-  --color-text-muted: #a1a1aa;
+  --font-sans: 'Barlow', system-ui, sans-serif;
+  --font-display: 'Oswald', system-ui, sans-serif;
+
+  --color-bg: #0A0A0C;
+  --color-surface: #15161B;
+  --color-surface-hover: #1E1F26;
+  --color-border: #2A2C33;
+
+  --color-banner: #0E1A33;
+  --color-banner-alt: #0B1220;
+  --color-accent: #E8B93D;
+  --color-accent-hover: #F5C94C;
+
+  --color-text: #ECECEE;
+  --color-text-secondary: #8B93A7;
+  --color-text-muted: #6B6D76;
+
+  --color-state-success-bg: #16261D;
+  --color-state-success-text: #7CB88F;
+  --color-state-warning-bg: #2A230F;
+  --color-state-warning-text: #E8B93D;
+  --color-state-neutral-bg: #1E1F26;
+  --color-state-neutral-text: #6B6D76;
 }
 
 body {

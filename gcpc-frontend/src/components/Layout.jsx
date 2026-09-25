@@ -1,28 +1,30 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet } from "react-router-dom";
+import escudo from '../assets/gcpc_escudo.svg'
+import { Nav } from './Nav.jsx'
 
 function Layout() {
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="bg-brand-navy text-white text-center py-6">
-        <h1 className="text-4xl font-bold">GCPC</h1>
-        <h2 className="text-sm text-zinc-300">Gotham Comics Personal Collection</h2>
+    <div className="flex min-h-screen flex-col font-sans">
+      <header className="bg-banner flex items-center gap-4 px-6 py-5">
+        <img src={escudo} alt="Escudo GCPC" className="h-[110px] w-auto" />
+        <div className="text-left">
+          <h1 className="font-display text-4xl font-bold tracking-wide text-text sm:text-5xl">
+            GCPC
+          </h1>
+          <h2 className="text-sm tracking-[0.25em] text-text-secondary sm:text-base">
+            GOTHAM CITY PERSONAL COLLECTION
+          </h2>
+        </div>
       </header>
 
-      <main className="flex-1 px-4 pb-24">
+      <main className="flex-1 px-6 pb-28 pt-6">
         <Outlet />
       </main>
 
-      <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-surface text-brand-belt px-6 py-3 rounded-full shadow-lg">
-        {/*menu*/}
-        menú
-      </nav>
+      <Nav />
 
-      <footer className="text-center text-xs text-text-muted py-4">
-        Desarrollado por Marcos CM · 2026 — Código y diseño de la aplicación.
-        Batman y personajes relacionados son propiedad de DC Comics. Batman creado por Bob Kane y Bill Finger.
-      </footer>
     </div>
-  )
+  );
 }
 
-export { Layout }
+export { Layout };

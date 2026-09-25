@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { API_URL } from "../config.js";
 
-function Inicio() {
+function Index() {
   const [tomos, setTomos] = useState([]);
   const [comics, setComics] = useState([]);
 
@@ -123,4 +123,4 @@ function Inicio() {
   );
 }
 
-export { Inicio };
+export { Index };
