@@ -1,7 +1,8 @@
-import React from "react";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { API_URL } from "../config.js";
+import { Parrilla } from "../components/Parrilla.jsx";
+import { TarjetaTomo } from "../components/TarjetaTomo.jsx";
+import { TarjetaComic } from "../components/TarjetaComic.jsx";
 
 function Index() {
   const [tomos, setTomos] = useState([]);
@@ -59,6 +60,7 @@ function Index() {
           <p>{error.mensaje}</p>
         </div>
       )}
+
       <input
         type="text"
         placeholder="Buscar..."
@@ -67,58 +69,50 @@ function Index() {
       />
 
       {busqueda && (
-  <>
-    <h2>Tomos</h2>
-    {resultadoTomos.length === 0 ? (
-      <p>No se ha encontrado "{busqueda}" entre tus tomos</p>
-    ) : (
-      resultadoTomos.map(tomo => (
-        <div key={tomo.id}>
-          <h3><Link to={`/tomos/${tomo.id}`}>{tomo.nombre}</Link></h3>
-          {tomo.coverPath ? (
-            <img src={tomo.coverPath} alt={tomo.nombre} />
-          ) : (
-            <img src= "/img/portada-generica.jpg" alt="Sin portada" />
-          )}
-          <p>{tomo.editorial} — {tomo.anhoEdicion}</p>
-        </div>
-      ))
-    )}
+        <div className="mt-6 space-y-8">
+          <section>
+            <h2 className="font-display text-xl text-text mb-3">Tomos</h2>
+            <Parrilla
+              items={resultadoTomos}
+              keyExtractor={(tomo) => tomo.id}
+              renderItem={(tomo) => <TarjetaTomo tomo={tomo} />}
+              mensajeVacio={`No se ha encontrado "${busqueda}" entre tus tomos`}
+            />
+          </section>
 
-    <h2>Cómics</h2>
-    {resultadoComics.length === 0 ? (
-      <p>No se ha encontrado "{busqueda}" entre tus cómics</p>
-    ) : (
-      resultadoComics.map(comic => (
-        <div key={comic.id}>
-          <h3><Link to={`/comics/${comic.id}`}>{comic.nombre} #{comic.numero}</Link></h3>
-          {comic.coverPath ? (
-            <img src={comic.coverPath} alt={comic.nombre} />
-          ) : (
-            <img src= "/img/portada-generica.jpg" alt="Sin portada" />
-          )}
-          <p>Año {comic.anho}{comic.etapa ? ` — ${comic.etapa.nombre}` : ''}</p>
+          <section>
+            <h2 className="font-display text-xl text-text mb-3">Cómics</h2>
+            <Parrilla
+              items={resultadoComics}
+              keyExtractor={(comic) => comic.id}
+              renderItem={(comic) => <TarjetaComic comic={comic} />}
+              mensajeVacio={`No se ha encontrado "${busqueda}" entre tus cómics`}
+            />
+          </section>
         </div>
-      ))
-    )}
-  </>
-)}
+      )}
 
-      <hr />
-      <h3>Últimos tomos añadidos</h3>
-      {tomos.slice(0, 3).map((tomo) => (
-        <div key={tomo.id}>
-          <h3><Link to={`/tomos/${tomo.id}`}>{tomo.nombre}</Link></h3>
-          {tomo.coverPath ? (
-            <img src={tomo.coverPath} alt={tomo.nombre} />
-          ) : (
-            <img src= "/img/portada-generica.jpg" alt="Sin portada" />
-          )}
-          <p>
-            {tomo.editorial} — {tomo.anhoEdicion}
-          </p>
-        </div>
-      ))}
+      <hr className="my-8 border-border" />
+
+      <section>
+        <h2 className="font-display text-xl text-text mb-3">Últimos tomos añadidos</h2>
+        <Parrilla
+          items={tomos.slice(0, 3)}
+          keyExtractor={(tomo) => tomo.id}
+          renderItem={(tomo) => <TarjetaTomo tomo={tomo} />}
+          mensajeVacio="Todavía no tienes tomos en la colección"
+        />
+      </section>
+
+      <section className="mt-8">
+        <h2 className="font-display text-xl text-text mb-3">Últimas grapas añadidas</h2>
+        <Parrilla
+          items={comics.slice(0, 3)}
+          keyExtractor={(comic) => comic.id}
+          renderItem={(comic) => <TarjetaComic comic={comic} />}
+          mensajeVacio="Todavía no tienes grapas en la colección"
+        />
+      </section>
     </div>
   );
 }

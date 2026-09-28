@@ -10,6 +10,7 @@ function TarjetaTomo({ tomo }) {
       titulo={tomo.nombre}
       subtitulo={subtitulo}
       enlace={`/tomos/${tomo.id}`}
+      tipo="TOMO"
     />
   )
 }

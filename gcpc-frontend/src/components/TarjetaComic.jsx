@@ -8,6 +8,7 @@ function TarjetaComic({ comic }) {
       titulo={`${comic.nombre} #${comic.numero}`}
       subtitulo={comic.anho ? `Año ${comic.anho}` : 'Año sin especificar'}
       enlace={`/comics/${comic.id}`}
+      tipo="GRAPA"
     />
   )
 }
