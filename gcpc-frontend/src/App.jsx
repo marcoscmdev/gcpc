@@ -8,6 +8,7 @@ import { Arcos } from "./pages/Arcos.jsx";
 import { Etapas } from "./pages/Etapas.jsx";
 import { Archivo } from "./pages/Archivo.jsx";
 import { TomoDetalle } from "./pages/TomoDetalle.jsx";
+import { ComicDetalle } from "./pages/ComicDetalle.jsx";
 import { Listas } from "./pages/Listas.jsx";
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
         </Route>
         <Route path="archivo" element={<Archivo />} />
         <Route path="tomos/:id" element={<TomoDetalle />} />
+        <Route path="comics/:id" element={<ComicDetalle />} />
       </Route>
     </Routes>
   );

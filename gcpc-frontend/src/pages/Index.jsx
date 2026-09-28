@@ -91,7 +91,7 @@ function Index() {
     ) : (
       resultadoComics.map(comic => (
         <div key={comic.id}>
-          <h3>{comic.nombre} #{comic.numero}</h3>
+          <h3><Link to={`/comics/${comic.id}`}>{comic.nombre} #{comic.numero}</Link></h3>
           {comic.coverPath ? (
             <img src={comic.coverPath} alt={comic.nombre} />
           ) : (

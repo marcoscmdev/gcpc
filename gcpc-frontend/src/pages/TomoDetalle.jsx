@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { API_URL } from '../config.js'
 
 function manejarRespuesta(response) {
@@ -69,7 +69,7 @@ function TomoDetalle() {
       ) : (
         tomo.comicsContiene.map(comic => (
           <div key={comic.id}>
-            <h3>{comic.nombre} #{comic.numero}</h3>
+            <h3><Link to={`/comics/${comic.id}`}>{comic.nombre} #{comic.numero}</Link></h3>
             <p>Año: {comic.anho ? comic.anho : 'Año sin especificar'}</p>
 
             {comic.etapa && <p>Etapa: {comic.etapa.nombre}</p>}
