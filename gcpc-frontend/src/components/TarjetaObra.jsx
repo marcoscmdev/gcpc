@@ -6,7 +6,7 @@ function TarjetaObra({ imagen, alt, titulo, subtitulo, enlace, tipo }) {
   return (
     <Link
       to={enlace}
-      className="block rounded-xl border border-border bg-surface p-4 transition-colors hover:bg-surface-hover"
+      className="block rounded-xl border-2 border-transparent bg-banner p-4 transition hover:scale-[1.02] hover:border-accent-hover"
     >
       {tipo && (
         <span

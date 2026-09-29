@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react'
 import { API_URL } from '../config.js'
 import { ResultadosBusqueda } from '../components/ResultadosBusqueda.jsx'
+import { TituloPagina } from '../components/TituloPagina.jsx'
+import { Panel } from '../components/Panel.jsx'
+import { Campo } from '../components/Campo.jsx'
+import { Boton } from '../components/Boton.jsx'
+import { MensajeError } from '../components/MensajeError.jsx'
 
 const ROLES = [
   { valor: 'GUION', etiqueta: 'Guionista' },
@@ -88,53 +93,73 @@ function Personas() {
 
   return (
     <div>
-      <h1>Personas</h1>
+      <TituloPagina
+        titulo="Personas"
+        descripcion="Busca ejemplares por autor y filtra por su rol: guionista, dibujante, colorista..."
+      />
 
-      <div style={{ position: 'relative' }}>
-        <input
-          value={texto}
-          onChange={(e) => {
-            setTexto(e.target.value)
-            setMostrarSugerencias(true)
-          }}
-          placeholder="Buscar por nombre..."
-        />
+      <Panel titulo="Buscar autor">
+        <div className="relative">
+          <Campo
+            label="Nombre"
+            placeholder="Buscar por nombre..."
+            value={texto}
+            onChange={(e) => {
+              setTexto(e.target.value)
+              setMostrarSugerencias(true)
+            }}
+          />
 
-        {mostrarSugerencias && sugerencias.length > 0 && (
-          <ul>
-            {sugerencias.map(persona => (
-              <li key={persona.id} onClick={() => handleSeleccionar(persona)}>
-                {persona.nombre} {persona.localidad ? `(${persona.localidad})` : ''}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+          {mostrarSugerencias && sugerencias.length > 0 && (
+            <ul className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-border bg-surface shadow-lg">
+              {sugerencias.map(persona => (
+                <li
+                  key={persona.id}
+                  onClick={() => handleSeleccionar(persona)}
+                  className="cursor-pointer px-3 py-2 text-sm text-text hover:bg-surface-hover"
+                >
+                  {persona.nombre} {persona.localidad ? `(${persona.localidad})` : ''}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
 
-      <div>
-        {ROLES.map(({ valor, etiqueta }) => (
-          <label key={valor}>
-            <input
-              type="checkbox"
-              checked={rolesSeleccionados.includes(valor)}
-              onChange={() => handleToggleRol(valor)}
-            />
-            {etiqueta}
-          </label>
-        ))}
-      </div>
-      <button onClick={handleLimpiar}>Limpiar</button>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {ROLES.map(({ valor, etiqueta }) => {
+            const activo = rolesSeleccionados.includes(valor)
+            return (
+              <label
+                key={valor}
+                className={`cursor-pointer rounded-full border px-3 py-1.5 text-sm transition-colors ${
+                  activo
+                    ? 'border-accent bg-state-warning-bg text-state-warning-text'
+                    : 'border-border bg-bg text-text-secondary hover:text-text'
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  className="sr-only"
+                  checked={activo}
+                  onChange={() => handleToggleRol(valor)}
+                />
+                {etiqueta}
+              </label>
+            )
+          })}
+        </div>
 
-      {cargando && <h4>Buscando...</h4>}
-      {error && (
-        <div>
-          <h2>Error</h2>
-          <p>Código: {error.codigo}</p>
-          <p>{error.mensaje}</p>
+        <Boton className="mt-4" onClick={handleLimpiar}>Limpiar</Boton>
+
+        {cargando && <p className="mt-4 text-sm text-text-secondary">Buscando...</p>}
+        {error && <MensajeError className="mt-4" codigo={error.codigo} mensaje={error.mensaje} />}
+      </Panel>
+
+      {buscado && !cargando && (
+        <div className="mt-6">
+          <ResultadosBusqueda comics={comics} />
         </div>
       )}
-
-      {buscado && !cargando && <ResultadosBusqueda comics={comics} />}
     </div>
   )
 }

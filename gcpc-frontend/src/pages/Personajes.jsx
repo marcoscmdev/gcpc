@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react'
 import { API_URL } from '../config.js'
 import { ResultadosBusqueda } from '../components/ResultadosBusqueda.jsx'
+import { TituloPagina } from '../components/TituloPagina.jsx'
+import { Panel } from '../components/Panel.jsx'
+import { Boton } from '../components/Boton.jsx'
+import { ListaSeleccion } from '../components/ListaSeleccion.jsx'
+import { MensajeError } from '../components/MensajeError.jsx'
 
 function Personajes() {
   const [personajes, setPersonajes] = useState([])
@@ -50,33 +55,32 @@ function Personajes() {
 
   return (
     <div>
-      <h1>Personajes</h1>
-      <button onClick={handleQuitarSeleccion}>Quitar selección</button>
+      <TituloPagina
+        titulo="Personajes"
+        descripcion="Filtra por los personajes que aparecen en cada cómic."
+      />
 
-      <div>
-        {personajes.map(personaje => (
-          <label key={personaje.id}>
-            <input
-              type="radio"
-              name="personaje"
-              checked={seleccionado === personaje.id}
-              onChange={() => handleSeleccionar(personaje)}
-            />
-            {personaje.nombre}
-          </label>
-        ))}
-      </div>
+      <Panel titulo="Selecciona un personaje">
+        <ListaSeleccion
+          items={personajes}
+          seleccionadoId={seleccionado}
+          onSeleccionar={handleSeleccionar}
+          name="personaje"
+        />
 
-      {cargando && <h4>Buscando...</h4>}
-      {error && (
-        <div>
-          <h2>Error</h2>
-          <p>Código: {error.codigo}</p>
-          <p>{error.mensaje}</p>
+        {seleccionado && (
+          <Boton className="mt-4" onClick={handleQuitarSeleccion}>Quitar selección</Boton>
+        )}
+
+        {cargando && <p className="mt-4 text-sm text-text-secondary">Buscando...</p>}
+        {error && <MensajeError className="mt-4" codigo={error.codigo} mensaje={error.mensaje} />}
+      </Panel>
+
+      {buscado && !cargando && (
+        <div className="mt-6">
+          <ResultadosBusqueda comics={comics} />
         </div>
       )}
-
-      {buscado && !cargando && <ResultadosBusqueda comics={comics} />}
     </div>
   )
 }

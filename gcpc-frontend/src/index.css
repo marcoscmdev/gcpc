@@ -29,6 +29,8 @@
   --color-state-neutral-text: #6B6D76;
   --color-state-info-bg: #16202E;
   --color-state-info-text: #7DA3C9;
+  --color-state-danger-bg: #2A1616;
+  --color-state-danger-text: #D98686;
 }
 
 body {

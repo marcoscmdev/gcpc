@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { API_URL } from '../config.js'
+import { TituloPagina } from '../components/TituloPagina.jsx'
+import { Panel } from '../components/Panel.jsx'
+import { MensajeError } from '../components/MensajeError.jsx'
 
 function manejarRespuesta(response) {
   if (!response.ok) {
@@ -29,14 +32,13 @@ function ComicDetalle() {
       .finally(() => setCargando(false))
   }, [id])
 
-  if (cargando) return <h4>Cargando...</h4>
+  if (cargando) return <p className="text-sm text-text-secondary">Cargando...</p>
 
   if (error) {
     return (
       <div>
-        <h2>Error</h2>
-        <p>Código: {error.codigo}</p>
-        <p>{error.mensaje}</p>
+        <TituloPagina titulo="Error" />
+        <MensajeError codigo={error.codigo} mensaje={error.mensaje} />
       </div>
     )
   }
@@ -45,47 +47,54 @@ function ComicDetalle() {
 
   return (
     <div>
-      <h1>{comic.nombre} #{comic.numero}</h1>
+      <TituloPagina titulo={`${comic.nombre} #${comic.numero}`} />
 
-      <img
-        src={comic.coverPath ?? '/img/portada-generica.jpg'}
-        alt={comic.nombre}
-        width={200}
-      />
+      <Panel>
+        <div className="flex flex-col gap-6 sm:flex-row">
+          <img
+            src={comic.coverPath ?? '/img/portada-generica.jpg'}
+            alt={comic.nombre}
+            className="w-40 shrink-0 self-start aspect-[2/3] rounded-lg object-cover"
+          />
 
-      <p>Año: {comic.anho ? comic.anho : 'Año sin especificar'}</p>
-      {comic.etapa && <p>Etapa: {comic.etapa.nombre}</p>}
-      <p>Puntuación: {comic.ranking ?? 'Sin puntuar'}</p>
-      <p>Notas: {comic.notas || 'Sin notas'}</p>
+          <div className="space-y-2 text-base text-text-secondary">
+            <p>Año: <span className="text-text">{comic.anho ? comic.anho : 'Año sin especificar'}</span></p>
+            {comic.etapa && <p>Etapa: <span className="text-text">{comic.etapa.nombre}</span></p>}
+            <p>Puntuación: <span className="text-text">{comic.ranking ?? 'Sin puntuar'}</span></p>
+            <p>Notas: <span className="text-text">{comic.notas || 'Sin notas'}</span></p>
 
-      {comic.arcos.length > 0 && (
-        <p>Arco{comic.arcos.length > 1 ? 's' : ''}: {comic.arcos.map(a => a.nombre).join(', ')}</p>
-      )}
+            {comic.arcos.length > 0 && (
+              <p>Arco{comic.arcos.length > 1 ? 's' : ''}: <span className="text-text">{comic.arcos.map(a => a.nombre).join(', ')}</span></p>
+            )}
 
-      {comic.estilos.length > 0 && (
-        <p>Estilo{comic.estilos.length > 1 ? 's' : ''}: {comic.estilos.map(e => e.nombre).join(', ')}</p>
-      )}
+            {comic.estilos.length > 0 && (
+              <p>Estilo{comic.estilos.length > 1 ? 's' : ''}: <span className="text-text">{comic.estilos.map(e => e.nombre).join(', ')}</span></p>
+            )}
 
-      {comic.personas.length > 0 && (
-        <p>Autores: {comic.personas.map(p => `${p.nombre} (${p.rol})`).join(', ')}</p>
-      )}
+            {comic.personas.length > 0 && (
+              <p>Autores: <span className="text-text">{comic.personas.map(p => `${p.nombre} (${p.rol})`).join(', ')}</span></p>
+            )}
 
-      {comic.personajes.length > 0 && (
-        <p>Personajes: {comic.personajes.map(p => p.nombre).join(', ')}</p>
-      )}
+            {comic.personajes.length > 0 && (
+              <p>Personajes: <span className="text-text">{comic.personajes.map(p => p.nombre).join(', ')}</span></p>
+            )}
+          </div>
+        </div>
+      </Panel>
 
-      <hr />
-
-      <h2>Tomo</h2>
-      {comic.tomos.length === 0 ? (
-        <p>Grapa suelta — no pertenece a ningún tomo de la colección</p>
-      ) : (
-        comic.tomos.map(tomo => (
-          <p key={tomo.id}>
-            <Link to={`/tomos/${tomo.id}`}>{tomo.nombre}</Link>
-          </p>
-        ))
-      )}
+      <Panel titulo="Tomo" className="mt-6">
+        {comic.tomos.length === 0 ? (
+          <p className="text-sm text-text-secondary">Cómic suelto — no pertenece a ningún tomo de tu colección</p>
+        ) : (
+          <div className="space-y-2">
+            {comic.tomos.map(tomo => (
+              <p key={tomo.id}>
+                <Link to={`/tomos/${tomo.id}`} className="text-text hover:text-accent">{tomo.nombre}</Link>
+              </p>
+            ))}
+          </div>
+        )}
+      </Panel>
     </div>
   )
 }

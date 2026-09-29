@@ -1,7 +1,11 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { API_URL } from "../config.js";
+import { TituloPagina } from "../components/TituloPagina.jsx";
+import { Panel } from "../components/Panel.jsx";
+import { Campo } from "../components/Campo.jsx";
+import { Boton } from "../components/Boton.jsx";
+import { Etiqueta } from "../components/Etiqueta.jsx";
 
 function manejarRespuesta(response) {
   if (!response.ok) {
@@ -12,6 +16,12 @@ function manejarRespuesta(response) {
       });
   }
   return response.json();
+}
+
+function estadoComic(comic) {
+  if (comic.loTengo) return { texto: "Lo tengo", tono: "success" };
+  if (comic.noBusco) return { texto: "No busco", tono: "neutral" };
+  return { texto: "No lo tengo", tono: "danger" };
 }
 
 function Archivo() {
@@ -63,85 +73,114 @@ function Archivo() {
 
   return (
     <div>
-      <h1>Archivo</h1>
-
-      <h2>Buscar en GCD Archive</h2>
-      <input
-        type="text"
-        placeholder="Serie USA"
-        value={serie}
-        onChange={(e) => setSerie(e.target.value)}
+      <TituloPagina
+        titulo="Archivo"
+        descripcion="Cruce con la base de datos GCD (ediciones USA) y mis notas personales."
       />
-      <input
-        type="text"
-        placeholder="Número (opcional)"
-        value={numero}
-        onChange={(e) => setNumero(e.target.value)}
-      />
-      <button onClick={handleBuscar}>Buscar</button>
 
-      {cargando && <h4>Buscando...</h4>}
+      <div className="grid gap-6 md:grid-cols-2">
+        <Panel titulo="Contrastar con GCD">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Campo
+              label="Título (inglés)"
+              placeholder="Detective Comics"
+              value={serie}
+              onChange={(e) => setSerie(e.target.value)}
+            />
+            <Campo
+              label="Número (opcional)"
+              placeholder="#27"
+              value={numero}
+              onChange={(e) => setNumero(e.target.value)}
+            />
+          </div>
 
-      {error && (
-        <div>
-          <h2>Error</h2>
-          <p>Código: {error.codigo}</p>
-          <p>{error.mensaje}</p>
-        </div>
+          <Boton className="mt-4" onClick={handleBuscar}>Buscar en GCD</Boton>
+
+          {cargando && <p className="mt-4 text-sm text-text-secondary">Buscando...</p>}
+
+          {error && (
+            <div className="mt-4 rounded-lg bg-state-warning-bg p-3 text-sm text-state-warning-text">
+              <p className="font-medium">Error {error.codigo}</p>
+              <p>{error.mensaje}</p>
+            </div>
+          )}
+        </Panel>
+
+        <Panel titulo="Curiosidades">
+          <Campo
+            label="Buscar en mis notas"
+            placeholder="firma, dedicatoria, estado, anécdota..."
+            value={textoCuriosidad}
+            onChange={(e) => setTextoCuriosidad(e.target.value)}
+          />
+
+          <Boton className="mt-4" onClick={handleBuscarCuriosidad}>Buscar</Boton>
+
+          {cargandoCuriosidad && <p className="mt-4 text-sm text-text-secondary">Buscando...</p>}
+
+          {errorCuriosidad && (
+            <div className="mt-4 rounded-lg bg-state-warning-bg p-3 text-sm text-state-warning-text">
+              <p className="font-medium">Error {errorCuriosidad.codigo}</p>
+              <p>{errorCuriosidad.mensaje}</p>
+            </div>
+          )}
+        </Panel>
+      </div>
+
+      {buscado && !cargando && (
+        <Panel titulo={`Resultados GCD — "${serie}"`} className="mt-6">
+          {resultados.length === 0 ? (
+            <p className="text-sm text-text-secondary">
+              No se ha encontrado ninguna serie llamada "{serie}" en el archivo GCD
+            </p>
+          ) : (
+            <div className="space-y-3">
+              {resultados.map((comic) => {
+                const estado = estadoComic(comic);
+                const encabezado = comic.titulo || `${comic.serie} #${comic.numero}`;
+                return (
+                  <div
+                    key={comic.gcdIssueId}
+                    className="flex items-center justify-between rounded-lg border border-border bg-banner p-3"
+                  >
+                    <div>
+                      <h3 className="font-sans text-xl text-text">{encabezado}</h3>
+                      {comic.titulo && (
+                        <p className="text-sm text-text-secondary">
+                          {comic.serie} #{comic.numero}
+                        </p>
+                      )}
+                    </div>
+                    <Etiqueta texto={estado.texto} tono={estado.tono} />
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </Panel>
       )}
 
-      {buscado && !cargando &&
-        (resultados.length === 0 ? (
-          <p>
-            No se ha encontrado ninguna serie llamada "{serie}" en el archivo
-            GCD
-          </p>
-        ) : (
-          resultados.map((comic) => (
-            <div key={comic.gcdIssueId}>
-              <h3>{comic.titulo}</h3>
-              <p>
-                {comic.serie} #{comic.numero}
-              </p>
-              <p>{comic.loTengo ? "✅ Lo tienes" : "❌ No lo tienes"}</p>
+      {buscadoCuriosidad && !cargandoCuriosidad && (
+        <Panel titulo={`Resultados curiosidades — "${textoCuriosidad}"`} className="mt-6">
+          {resultadosCuriosidad.length === 0 ? (
+            <p className="text-sm text-text-secondary">
+              No se ha encontrado "{textoCuriosidad}" en ninguna curiosidad
+            </p>
+          ) : (
+            <div className="space-y-3">
+              {resultadosCuriosidad.map((tomo) => (
+                <div key={tomo.id} className="rounded-lg border border-border bg-banner p-3">
+                  <h3 className="font-sans text-xl text-text">
+                    <Link to={`/tomos/${tomo.id}`} className="hover:text-accent">{tomo.nombre}</Link>
+                  </h3>
+                  <p className="text-sm text-text-secondary">{tomo.editorial} — {tomo.anhoEdicion}</p>
+                </div>
+              ))}
             </div>
-          ))
-        ))}
-
-      <hr />
-
-      <h2>Buscar curiosidades</h2>
-      <input
-        type="text"
-        placeholder="Texto a buscar en curiosidades..."
-        value={textoCuriosidad}
-        onChange={(e) => setTextoCuriosidad(e.target.value)}
-      />
-      <button onClick={handleBuscarCuriosidad}>Buscar</button>
-
-      {cargandoCuriosidad && <h4>Buscando...</h4>}
-
-      {errorCuriosidad && (
-        <div>
-          <h2>Error</h2>
-          <p>Código: {errorCuriosidad.codigo}</p>
-          <p>{errorCuriosidad.mensaje}</p>
-        </div>
+          )}
+        </Panel>
       )}
-
-      {buscadoCuriosidad && !cargandoCuriosidad &&
-        (resultadosCuriosidad.length === 0 ? (
-          <p>No se ha encontrado "{textoCuriosidad}" en ninguna curiosidad</p>
-        ) : (
-          resultadosCuriosidad.map((tomo) => (
-            <div key={tomo.id}>
-              <h3>
-                <Link to={`/tomos/${tomo.id}`}>{tomo.nombre}</Link>
-              </h3>
-              <p>{tomo.editorial} — {tomo.anhoEdicion}</p>
-            </div>
-          ))
-        ))}
     </div>
   );
 }

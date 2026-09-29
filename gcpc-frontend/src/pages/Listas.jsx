@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom'
+import { TituloPagina } from '../components/TituloPagina.jsx'
 
 function Listas() {
   const clasePestaña = ({ isActive }) =>
@@ -6,7 +7,10 @@ function Listas() {
 
   return (
     <div>
-      <h1 className="font-display text-2xl text-text mb-4">Listas</h1>
+      <TituloPagina
+        titulo="Listas"
+        descripcion="Explora por estilo, arco argumental o etapa."
+      />
 
       <nav className="flex gap-6 border-b border-border mb-6">
         <NavLink to="estilos" className={clasePestaña}>Estilos</NavLink>

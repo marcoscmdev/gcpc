@@ -17,7 +17,7 @@ function Layout() {
         </div>
       </header>
 
-      <main className="flex-1 px-6 pb-28 pt-6">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-6 pb-28 pt-6">
         <Outlet />
       </main>
 

@@ -3,6 +3,10 @@ import { API_URL } from "../config.js";
 import { Parrilla } from "../components/Parrilla.jsx";
 import { TarjetaTomo } from "../components/TarjetaTomo.jsx";
 import { TarjetaComic } from "../components/TarjetaComic.jsx";
+import { TituloPagina } from "../components/TituloPagina.jsx";
+import { Panel } from "../components/Panel.jsx";
+import { Campo } from "../components/Campo.jsx";
+import { MensajeError } from "../components/MensajeError.jsx";
 
 function Index() {
   const [tomos, setTomos] = useState([]);
@@ -49,24 +53,22 @@ function Index() {
 
   return (
     <div>
-      <h1>Inicio</h1>
-
-      {(cargandoTomos || cargandoComics) && <h4>Cargando...</h4>}
-
-      {error && (
-        <div>
-          <h2>Error</h2>
-          <p>Código: {error.codigo}</p>
-          <p>{error.mensaje}</p>
-        </div>
-      )}
-
-      <input
-        type="text"
-        placeholder="Buscar..."
-        value={busqueda}
-        onChange={(e) => setBusqueda(e.target.value)}
+      <TituloPagina
+        titulo="Inicio"
+        descripcion="Mi colección de cómics de Batman, de un vistazo."
       />
+
+      <Panel titulo="Buscar en mi colección">
+        <Campo
+          label="Buscar"
+          placeholder="Buscar..."
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+        />
+
+        {(cargandoTomos || cargandoComics) && <p className="mt-4 text-sm text-text-secondary">Cargando...</p>}
+        {error && <MensajeError className="mt-4" codigo={error.codigo} mensaje={error.mensaje} />}
+      </Panel>
 
       {busqueda && (
         <div className="mt-6 space-y-8">
@@ -92,27 +94,31 @@ function Index() {
         </div>
       )}
 
-      <hr className="my-8 border-border" />
+      {!busqueda && (
+        <>
+          <hr className="my-8 border-border" />
 
-      <section>
-        <h2 className="font-display text-xl text-text mb-3">Últimos tomos añadidos</h2>
-        <Parrilla
-          items={tomos.slice(0, 3)}
-          keyExtractor={(tomo) => tomo.id}
-          renderItem={(tomo) => <TarjetaTomo tomo={tomo} />}
-          mensajeVacio="Todavía no tienes tomos en la colección"
-        />
-      </section>
+          <section>
+            <h2 className="font-display text-xl text-text mb-3">Últimos tomos añadidos</h2>
+            <Parrilla
+              items={tomos.slice(0, 3)}
+              keyExtractor={(tomo) => tomo.id}
+              renderItem={(tomo) => <TarjetaTomo tomo={tomo} />}
+              mensajeVacio="Todavía no tienes tomos en la colección"
+            />
+          </section>
 
-      <section className="mt-8">
-        <h2 className="font-display text-xl text-text mb-3">Últimas grapas añadidas</h2>
-        <Parrilla
-          items={comics.slice(0, 3)}
-          keyExtractor={(comic) => comic.id}
-          renderItem={(comic) => <TarjetaComic comic={comic} />}
-          mensajeVacio="Todavía no tienes grapas en la colección"
-        />
-      </section>
+          <section className="mt-8">
+            <h2 className="font-display text-xl text-text mb-3">Últimas grapas añadidas</h2>
+            <Parrilla
+              items={comics.slice(0, 3)}
+              keyExtractor={(comic) => comic.id}
+              renderItem={(comic) => <TarjetaComic comic={comic} />}
+              mensajeVacio="Todavía no tienes grapas en la colección"
+            />
+          </section>
+        </>
+      )}
     </div>
   );
 }

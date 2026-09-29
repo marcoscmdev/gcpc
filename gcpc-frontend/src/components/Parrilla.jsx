@@ -4,7 +4,7 @@ function Parrilla({ items, renderItem, keyExtractor, mensajeVacio }) {
   }
 
   return (
-    <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-6">
+    <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-6">
       {items.map(item => (
         <div key={keyExtractor(item)}>{renderItem(item)}</div>
       ))}

@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react'
 import { API_URL } from '../config.js'
 import { ResultadosBusqueda } from '../components/ResultadosBusqueda.jsx'
+import { TituloPagina } from '../components/TituloPagina.jsx'
+import { Panel } from '../components/Panel.jsx'
+import { Boton } from '../components/Boton.jsx'
+import { ListaSeleccion } from '../components/ListaSeleccion.jsx'
+import { MensajeError } from '../components/MensajeError.jsx'
 
 function Arcos() {
   const [arcos, setArcos] = useState([])
@@ -50,33 +55,32 @@ function Arcos() {
 
   return (
     <div>
-      <h1>Arcos</h1>
-      <button onClick={handleQuitarSeleccion}>Quitar selección</button>
+      <TituloPagina
+        titulo="Arcos"
+        descripcion="Busca todos los ejemplares de un arco argumental."
+      />
 
-      <div>
-        {arcos.map(arco => (
-          <label key={arco.id}>
-            <input
-              type="radio"
-              name="arco"
-              checked={seleccionado === arco.id}
-              onChange={() => handleSeleccionar(arco)}
-            />
-            {arco.nombre}
-          </label>
-        ))}
-      </div>
+      <Panel titulo="Selecciona un arco">
+        <ListaSeleccion
+          items={arcos}
+          seleccionadoId={seleccionado}
+          onSeleccionar={handleSeleccionar}
+          name="arco"
+        />
 
-      {cargando && <h4>Buscando...</h4>}
-      {error && (
-        <div>
-          <h2>Error</h2>
-          <p>Código: {error.codigo}</p>
-          <p>{error.mensaje}</p>
+        {seleccionado && (
+          <Boton className="mt-4" onClick={handleQuitarSeleccion}>Quitar selección</Boton>
+        )}
+
+        {cargando && <p className="mt-4 text-sm text-text-secondary">Buscando...</p>}
+        {error && <MensajeError className="mt-4" codigo={error.codigo} mensaje={error.mensaje} />}
+      </Panel>
+
+      {buscado && !cargando && (
+        <div className="mt-6">
+          <ResultadosBusqueda comics={comics} />
         </div>
       )}
-
-      {buscado && !cargando && <ResultadosBusqueda comics={comics} />}
     </div>
   )
 }
