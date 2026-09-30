@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react'
+import { Palette } from 'lucide-react'
 import { API_URL } from '../config.js'
 import { ResultadosBusqueda } from '../components/ResultadosBusqueda.jsx'
 import { TituloPagina } from '../components/TituloPagina.jsx'
 import { Panel } from '../components/Panel.jsx'
 import { Boton } from '../components/Boton.jsx'
-import { ListaSeleccion } from '../components/ListaSeleccion.jsx'
+import { Parrilla } from '../components/Parrilla.jsx'
+import { TarjetaCircular } from '../components/TarjetaCircular.jsx'
 import { MensajeError } from '../components/MensajeError.jsx'
+import { slugificar } from '../utils/texto.js'
 
 function Estilos() {
   const [estilos, setEstilos] = useState([])
@@ -61,11 +64,21 @@ function Estilos() {
       />
 
       <Panel titulo="Selecciona un estilo">
-        <ListaSeleccion
+        <Parrilla
           items={estilos}
-          seleccionadoId={seleccionado}
-          onSeleccionar={handleSeleccionar}
-          name="estilo"
+          keyExtractor={(estilo) => estilo.id}
+          anchoMinimo="100px"
+          mensajeVacio="Todavía no tienes estilos registrados"
+          renderItem={(estilo) => (
+            <TarjetaCircular
+              imagen={`/img/estilos/${slugificar(estilo.nombre)}.jpg`}
+              alt={estilo.nombre}
+              nombre={estilo.nombre}
+              seleccionado={seleccionado === estilo.id}
+              onClick={() => handleSeleccionar(estilo)}
+              IconoRespaldo={Palette}
+            />
+          )}
         />
 
         {seleccionado && (
