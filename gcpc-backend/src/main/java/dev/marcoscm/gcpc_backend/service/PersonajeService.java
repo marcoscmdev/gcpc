@@ -40,7 +40,7 @@ public class PersonajeService {
 
     public List<PersonajeResumenDto> getAll() {
         return personajeRepository.findAll().stream()
-                .map(p -> new PersonajeResumenDto(p.getId(), p.getNombre()))
+                .map(p -> new PersonajeResumenDto(p.getId(), p.getNombre(), p.getTipo(), p.getNombreReal(), p.getDescripcion()))
                 .toList();
     }
 }

@@ -52,7 +52,7 @@ public class TomoService {
 
     private List<PersonajeResumenDto> getPersonajesDeComic(Integer comicId) {
         return comicPersonajeRepository.findByComicIdConPersonaje(comicId).stream()
-                .map(cp -> new PersonajeResumenDto(cp.getPersonajeId(), cp.getPersonaje().getNombre()))
+                .map(cp -> new PersonajeResumenDto(cp.getPersonajeId(), cp.getPersonaje().getNombre(), cp.getPersonaje().getTipo(), cp.getPersonaje().getNombreReal(), cp.getPersonaje().getDescripcion()))
                 .toList();
     }
 
@@ -64,7 +64,7 @@ public class TomoService {
 
     private List<ArcoResumenDto> getArcosDeComic(Integer comicId) {
         return comicArcoRepository.findByComicIdConArco(comicId).stream()
-                .map(ca -> new ArcoResumenDto(ca.getArcoId(), ca.getArco().getNombre()))
+                .map(ca -> new ArcoResumenDto(ca.getArcoId(), ca.getArco().getNombre(), ca.getArco().getAnho(), ca.getArco().getDescripcion()))
                 .toList();
     }
 
@@ -91,7 +91,7 @@ public class TomoService {
                         ct.getOrden(),
                         ct.getComic().getCoverPath(),
                         ct.getComic().getEtapa() != null
-                                ? new EtapaResumenDto(ct.getComic().getEtapa().getId(), ct.getComic().getEtapa().getNombre())
+                                ? new EtapaResumenDto(ct.getComic().getEtapa().getId(), ct.getComic().getEtapa().getNombre(), ct.getComic().getEtapa().getAnhoInicio(), ct.getComic().getEtapa().getAnhoFin())
                                 : null,
                         getPersonasDeComic(ct.getComic().getId()),
                         getPersonajesDeComic(ct.getComic().getId()),

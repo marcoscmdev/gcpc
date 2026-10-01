@@ -24,6 +24,12 @@ public class PersonajeEntity {
     @Enumerated(EnumType.STRING)
     private TipoPersonaje tipo;
 
+    @Column(name = "nombre_real")
+    private String nombreReal;
+
+    @Column(columnDefinition = "TEXT")
+    private String descripcion;
+
     private Integer gcdCharacterId;
 
     @OneToMany(mappedBy = "personaje", fetch = FetchType.LAZY)

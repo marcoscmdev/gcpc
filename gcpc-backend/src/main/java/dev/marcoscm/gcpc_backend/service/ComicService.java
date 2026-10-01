@@ -34,7 +34,7 @@ public class ComicService {
 
     private List<PersonajeResumenDto> getPersonajesDeComic(Integer comicId){
         return comicPersonajeRepository.findByComicIdConPersonaje(comicId).stream().
-                map(cp -> new PersonajeResumenDto(cp.getPersonajeId(), cp.getPersonaje().getNombre()))
+                map(cp -> new PersonajeResumenDto(cp.getPersonajeId(), cp.getPersonaje().getNombre(), cp.getPersonaje().getTipo(), cp.getPersonaje().getNombreReal(), cp.getPersonaje().getDescripcion()))
                 .toList();
     }
 
@@ -46,7 +46,7 @@ public class ComicService {
 
     private List<ArcoResumenDto> getArcosDeComic(Integer comicId){
         return comicArcoRepository.findByComicIdConArco(comicId).stream().
-                map(ca -> new ArcoResumenDto(ca.getArcoId(), ca.getArco().getNombre())).toList();
+                map(ca -> new ArcoResumenDto(ca.getArcoId(), ca.getArco().getNombre(), ca.getArco().getAnho(), ca.getArco().getDescripcion())).toList();
     }
 
     private List<TomoResumenDto> getTomosDeComic(Integer comicId){
@@ -67,7 +67,7 @@ public class ComicService {
                         null,
                         c.getCoverPath(),
                         c.getEtapa() != null
-                                ? new EtapaResumenDto(c.getEtapa().getId(), c.getEtapa().getNombre())
+                                ? new EtapaResumenDto(c.getEtapa().getId(), c.getEtapa().getNombre(), c.getEtapa().getAnhoInicio(), c.getEtapa().getAnhoFin())
                                 : null,
                         getPersonasDeComic(c.getId())
                 ))
@@ -79,7 +79,7 @@ public class ComicService {
 
         return new ComicDetalleDto(
                 comic.getId(),comic.getNombre(),comic.getNumero(),comic.getAnho(),comic.getRanking(),comic.getNotas(),comic.getCoverPath(),
-                comic.getEtapa() != null ? new EtapaResumenDto(comic.getEtapaId(), comic.getEtapa().getNombre()) : null,
+                comic.getEtapa() != null ? new EtapaResumenDto(comic.getEtapaId(), comic.getEtapa().getNombre(), comic.getEtapa().getAnhoInicio(), comic.getEtapa().getAnhoFin()) : null,
                 getPersonasDeComic(comicId),
                 getPersonajesDeComic(comicId),
                 getEstilosDeComic(comicId),

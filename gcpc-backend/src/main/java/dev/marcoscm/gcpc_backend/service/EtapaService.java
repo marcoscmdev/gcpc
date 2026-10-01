@@ -37,7 +37,7 @@ public class EtapaService {
 
     public List<EtapaResumenDto> getAll() {
             return etapaRepository.findAll().stream()
-                    .map(p -> new EtapaResumenDto(p.getId(), p.getNombre()))
+                    .map(p -> new EtapaResumenDto(p.getId(), p.getNombre(), p.getAnhoInicio(), p.getAnhoFin()))
                     .toList();
         }
 

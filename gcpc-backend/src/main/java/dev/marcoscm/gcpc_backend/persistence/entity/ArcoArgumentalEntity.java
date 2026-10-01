@@ -22,6 +22,12 @@ public class ArcoArgumentalEntity {
     @Column(nullable = false)
     private String nombre;
 
+    @Column(columnDefinition = "SMALLINT")
+    private Integer anho;
+
+    @Column(columnDefinition = "TEXT")
+    private String descripcion;
+
     @OneToMany(mappedBy = "arco", fetch = FetchType.LAZY)
     private List<ComicArcoEntity> comicArcos;
 }
