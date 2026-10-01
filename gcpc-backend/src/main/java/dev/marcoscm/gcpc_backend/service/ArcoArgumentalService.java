@@ -28,7 +28,7 @@ public class ArcoArgumentalService {
     }
 
     public List<ArcoResumenDto> getAll() {
-        return arcoArgumentalRepository.findAll().stream().map(p -> new ArcoResumenDto(p.getId(), p.getNombre(), p.getAnho(), p.getDescripcion())).toList();
+        return arcoArgumentalRepository.findAll().stream().map(p -> new ArcoResumenDto(p.getId(), p.getNombre(), p.getNombreOriginal(), p.getAnho(), p.getTipo(), p.getDescripcion())).toList();
     }
 
     public List<ComicEntity> getComicsDeArco(Integer arcoId) {

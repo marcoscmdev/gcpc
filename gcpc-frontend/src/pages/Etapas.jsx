@@ -4,8 +4,15 @@ import { ResultadosBusqueda } from '../components/ResultadosBusqueda.jsx'
 import { TituloPagina } from '../components/TituloPagina.jsx'
 import { Panel } from '../components/Panel.jsx'
 import { Boton } from '../components/Boton.jsx'
-import { ListaSeleccion } from '../components/ListaSeleccion.jsx'
+import { Parrilla } from '../components/Parrilla.jsx'
+import { TarjetaInfo } from '../components/TarjetaInfo.jsx'
 import { MensajeError } from '../components/MensajeError.jsx'
+
+function rangoAnhos(etapa) {
+  if (!etapa.anhoInicio) return null
+  if (!etapa.anhoFin) return `Desde ${etapa.anhoInicio}`
+  return `${etapa.anhoInicio} – ${etapa.anhoFin}`
+}
 
 function Etapas() {
   const [etapas, setEtapas] = useState([])
@@ -61,11 +68,19 @@ function Etapas() {
       />
 
       <Panel titulo="Selecciona una etapa">
-        <ListaSeleccion
+        <Parrilla
           items={etapas}
-          seleccionadoId={seleccionado}
-          onSeleccionar={handleSeleccionar}
-          name="etapa"
+          keyExtractor={(etapa) => etapa.id}
+          anchoMinimo="220px"
+          mensajeVacio="Todavía no tienes etapas registradas"
+          renderItem={(etapa) => (
+            <TarjetaInfo
+              nombre={etapa.nombre}
+              subtitulo={rangoAnhos(etapa)}
+              seleccionado={seleccionado === etapa.id}
+              onClick={() => handleSeleccionar(etapa)}
+            />
+          )}
         />
 
         {seleccionado && (

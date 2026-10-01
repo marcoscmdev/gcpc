@@ -10,10 +10,10 @@ function TarjetaCircular({ imagen, alt, nombre, seleccionado, onClick, IconoResp
       type="button"
       onClick={onClick}
       title={nombre}
-      className="flex w-full flex-col items-center gap-2 text-center"
+      className="group flex w-full flex-col items-center gap-2 text-center"
     >
       <span
-        className={`flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-2 transition-colors ${
+        className={`flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-2 transition group-hover:scale-110 ${
           seleccionado
             ? 'border-accent-hover bg-banner'
             : 'border-border bg-surface hover:border-accent-hover'
@@ -31,7 +31,7 @@ function TarjetaCircular({ imagen, alt, nombre, seleccionado, onClick, IconoResp
         )}
       </span>
       <span
-        className={`max-w-[7rem] truncate text-sm transition-colors ${
+        className={`max-w-[7rem] truncate text-sm transition group-hover:scale-110 ${
           seleccionado ? 'text-accent-hover' : 'text-text'
         }`}
       >

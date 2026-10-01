@@ -13,9 +13,9 @@ function Listas() {
       />
 
       <nav className="flex gap-6 border-b border-border mb-6">
+        <NavLink to="etapas" className={clasePestaña}>Etapas</NavLink>
         <NavLink to="estilos" className={clasePestaña}>Estilos</NavLink>
         <NavLink to="arcos" className={clasePestaña}>Arcos</NavLink>
-        <NavLink to="etapas" className={clasePestaña}>Etapas</NavLink>
       </nav>
 
       <Outlet />

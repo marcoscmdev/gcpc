@@ -28,6 +28,13 @@ public class ArcoArgumentalEntity {
     @Column(columnDefinition = "TEXT")
     private String descripcion;
 
+    @Column(name = "nombre_original")
+    private String nombreOriginal;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private TipoArco tipo;
+
     @OneToMany(mappedBy = "arco", fetch = FetchType.LAZY)
     private List<ComicArcoEntity> comicArcos;
 }

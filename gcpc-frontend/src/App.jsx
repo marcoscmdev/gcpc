@@ -19,10 +19,10 @@ function App() {
         <Route path="personajes" element={<Personajes />} />
         <Route path="personas" element={<Personas />} />
         <Route path="listas" element={<Listas />}>
-          <Route index element={<Navigate to="estilos" replace />} />
+          <Route index element={<Navigate to="etapas" replace />} />
+          <Route path="etapas" element={<Etapas />} />
           <Route path="estilos" element={<Estilos />} />
           <Route path="arcos" element={<Arcos />} />
-          <Route path="etapas" element={<Etapas />} />
         </Route>
         <Route path="archivo" element={<Archivo />} />
         <Route path="tomos/:id" element={<TomoDetalle />} />

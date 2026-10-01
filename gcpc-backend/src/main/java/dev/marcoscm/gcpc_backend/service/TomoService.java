@@ -64,7 +64,7 @@ public class TomoService {
 
     private List<ArcoResumenDto> getArcosDeComic(Integer comicId) {
         return comicArcoRepository.findByComicIdConArco(comicId).stream()
-                .map(ca -> new ArcoResumenDto(ca.getArcoId(), ca.getArco().getNombre(), ca.getArco().getAnho(), ca.getArco().getDescripcion()))
+                .map(ca -> new ArcoResumenDto(ca.getArcoId(), ca.getArco().getNombre(), ca.getArco().getNombreOriginal(), ca.getArco().getAnho(), ca.getArco().getTipo(), ca.getArco().getDescripcion()))
                 .toList();
     }
 

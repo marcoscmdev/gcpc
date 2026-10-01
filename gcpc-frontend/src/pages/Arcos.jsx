@@ -4,8 +4,24 @@ import { ResultadosBusqueda } from '../components/ResultadosBusqueda.jsx'
 import { TituloPagina } from '../components/TituloPagina.jsx'
 import { Panel } from '../components/Panel.jsx'
 import { Boton } from '../components/Boton.jsx'
-import { ListaSeleccion } from '../components/ListaSeleccion.jsx'
+import { Parrilla } from '../components/Parrilla.jsx'
+import { TarjetaInfo } from '../components/TarjetaInfo.jsx'
 import { MensajeError } from '../components/MensajeError.jsx'
+
+const ETIQUETAS_TIPO = {
+  arco: 'Arco',
+  saga: 'Saga',
+  evento: 'Evento',
+  antologia: 'Antología',
+  especial: 'Especial',
+}
+
+function metaArco(arco) {
+  const partes = []
+  if (arco.anho) partes.push(String(arco.anho))
+  if (arco.tipo) partes.push(ETIQUETAS_TIPO[arco.tipo] || arco.tipo)
+  return partes.join(' · ') || null
+}
 
 function Arcos() {
   const [arcos, setArcos] = useState([])
@@ -53,6 +69,8 @@ function Arcos() {
     setBuscado(false)
   }
 
+  const arcoSeleccionado = arcos.find(a => a.id === seleccionado)
+
   return (
     <div>
       <TituloPagina
@@ -60,21 +78,42 @@ function Arcos() {
         descripcion="Busca todos los ejemplares de un arco argumental."
       />
 
-      <Panel titulo="Selecciona un arco">
-        <ListaSeleccion
-          items={arcos}
-          seleccionadoId={seleccionado}
-          onSeleccionar={handleSeleccionar}
-          name="arco"
-        />
+      {!seleccionado && (
+        <Panel titulo="Selecciona un arco">
+          <Parrilla
+            items={arcos}
+            keyExtractor={(arco) => arco.id}
+            anchoMinimo="220px"
+            mensajeVacio="Todavía no tienes arcos argumentales registrados"
+            renderItem={(arco) => (
+              <TarjetaInfo
+                nombre={arco.nombre}
+                subtitulo={arco.nombreOriginal}
+                meta={metaArco(arco)}
+                descripcion={arco.descripcion}
+                seleccionado={seleccionado === arco.id}
+                onClick={() => handleSeleccionar(arco)}
+              />
+            )}
+          />
+        </Panel>
+      )}
 
-        {seleccionado && (
+      {error && <MensajeError className="mt-6" codigo={error.codigo} mensaje={error.mensaje} />}
+
+      {arcoSeleccionado && (
+        <Panel className="mt-6">
+          <TarjetaInfo
+            nombre={arcoSeleccionado.nombre}
+            subtitulo={arcoSeleccionado.nombreOriginal}
+            meta={metaArco(arcoSeleccionado)}
+            descripcion={arcoSeleccionado.descripcion}
+            seleccionado
+          />
           <Boton className="mt-4" onClick={handleQuitarSeleccion}>Quitar selección</Boton>
-        )}
-
-        {cargando && <p className="mt-4 text-sm text-text-secondary">Buscando...</p>}
-        {error && <MensajeError className="mt-4" codigo={error.codigo} mensaje={error.mensaje} />}
-      </Panel>
+          {cargando && <p className="mt-4 text-sm text-text-secondary">Buscando...</p>}
+        </Panel>
+      )}
 
       {buscado && !cargando && (
         <div className="mt-6">
