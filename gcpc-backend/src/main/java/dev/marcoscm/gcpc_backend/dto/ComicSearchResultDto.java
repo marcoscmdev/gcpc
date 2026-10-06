@@ -5,6 +5,7 @@ public record ComicSearchResultDto(
         String serie,
         String numero,
         String titulo,
+        Integer anio,
         boolean loTengo
 ) {
 }

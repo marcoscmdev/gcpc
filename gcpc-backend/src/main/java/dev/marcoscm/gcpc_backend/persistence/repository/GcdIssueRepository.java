@@ -11,7 +11,9 @@ public interface GcdIssueRepository extends Repository<GcdIssueEntity, Integer> 
 
     @Query("SELECT gi FROM GcdIssueEntity gi JOIN FETCH gi.series gs " +
             "WHERE gs.name LIKE %:seriesName% " +
-            "AND (:number IS NULL OR gi.number = :number)")
+            "AND (:number IS NULL OR gi.number = :number) " +
+            "AND gi.variantOfId IS NULL " +
+            "ORDER BY gs.name, gi.keyDate, gi.id")
     List<GcdIssueEntity> buscarPorSerieYNumero(@Param("seriesName") String seriesName,
                                                @Param("number") String number);
 
@@ -19,6 +21,7 @@ public interface GcdIssueRepository extends Repository<GcdIssueEntity, Integer> 
             "JOIN gcd_issue gi ON gi.series_id = gs.id " +
             "WHERE gs.name = :seriesName " +
             "AND CAST(gi.number AS UNSIGNED) BETWEEN :desde AND :hasta " +
+            "AND gi.variant_of_id IS NULL " +
             "ORDER BY CAST(gi.number AS UNSIGNED)",
             nativeQuery = true)
     List<GcdIssueEntity> buscarPorRango(@Param("seriesName") String seriesName,

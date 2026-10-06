@@ -138,7 +138,8 @@ function Archivo() {
             <div className="space-y-3">
               {resultados.map((comic) => {
                 const estado = estadoComic(comic);
-                const encabezado = comic.titulo || `${comic.serie} #${comic.numero}`;
+                const base = comic.titulo || `${comic.serie} #${comic.numero}`;
+                const encabezado = comic.anio ? `${base} (${comic.anio})` : base;
                 return (
                   <div
                     key={comic.gcdIssueId}

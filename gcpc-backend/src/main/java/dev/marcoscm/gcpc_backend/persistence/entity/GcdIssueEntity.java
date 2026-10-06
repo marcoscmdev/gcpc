@@ -29,6 +29,9 @@ public class GcdIssueEntity {
     @Column(name = "series_id", nullable = false)
     private Integer seriesId;
 
+    @Column(name = "variant_of_id")
+    private Integer variantOfId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "series_id", insertable = false, updatable = false)
     private GcdSeriesEntity series;
