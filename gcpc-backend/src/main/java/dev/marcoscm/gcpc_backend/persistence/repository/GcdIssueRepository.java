@@ -29,5 +29,14 @@ public interface GcdIssueRepository extends Repository<GcdIssueEntity, Integer> 
                                         @Param("hasta") Integer hasta);
 
 
+    @Query(value = "SELECT gi.* FROM mi_etapa_rango r " +
+            "JOIN gcd_issue gi ON gi.series_id = r.serie_id " +
+            "WHERE r.etapa_id = :etapaId " +
+            "AND CAST(gi.number AS UNSIGNED) BETWEEN r.num_desde AND r.num_hasta " +
+            "AND gi.variant_of_id IS NULL " +
+            "ORDER BY gi.series_id, CAST(gi.number AS UNSIGNED), gi.key_date, gi.id",
+            nativeQuery = true)
+    List<GcdIssueEntity> buscarPorEtapa(@Param("etapaId") Integer etapaId);
+
     List<GcdIssueEntity> findById(Integer id);
 }

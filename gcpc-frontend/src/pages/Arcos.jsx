@@ -3,6 +3,7 @@ import { API_URL } from '../config.js'
 import { ResultadosBusqueda } from '../components/ResultadosBusqueda.jsx'
 import { TituloPagina } from '../components/TituloPagina.jsx'
 import { Panel } from '../components/Panel.jsx'
+import { SeccionColapsable } from '../components/SeccionColapsable.jsx'
 import { Boton } from '../components/Boton.jsx'
 import { Parrilla } from '../components/Parrilla.jsx'
 import { TarjetaInfo } from '../components/TarjetaInfo.jsx'
@@ -15,6 +16,14 @@ const ETIQUETAS_TIPO = {
   antologia: 'Antología',
   especial: 'Especial',
 }
+
+const SECCIONES = [
+  { tipo: 'saga', titulo: 'Sagas' },
+  { tipo: 'arco', titulo: 'Arcos' },
+  { tipo: 'evento', titulo: 'Eventos' },
+  { tipo: 'antologia', titulo: 'Antologías' },
+  { tipo: 'especial', titulo: 'Especiales' },
+]
 
 function metaArco(arco) {
   const partes = []
@@ -53,7 +62,7 @@ function Arcos() {
     setSeleccionado(arco.id)
     setCargando(true)
     setError(null)
-    fetch(`${API_URL}/api/arcos-argumentales/buscar?nombre=${encodeURIComponent(arco.nombre)}`)
+    fetch(`${API_URL}/api/arcos-argumentales/${arco.id}/comics`)
       .then(manejarRespuesta)
       .then(data => {
         setComics(data)
@@ -79,24 +88,35 @@ function Arcos() {
       />
 
       {!seleccionado && (
-        <Panel titulo="Selecciona un arco">
-          <Parrilla
-            items={arcos}
-            keyExtractor={(arco) => arco.id}
-            anchoMinimo="220px"
-            mensajeVacio="Todavía no tienes arcos argumentales registrados"
-            renderItem={(arco) => (
-              <TarjetaInfo
-                nombre={arco.nombre}
-                subtitulo={arco.nombreOriginal}
-                meta={metaArco(arco)}
-                descripcion={arco.descripcion}
-                seleccionado={seleccionado === arco.id}
-                onClick={() => handleSeleccionar(arco)}
-              />
-            )}
-          />
-        </Panel>
+        <div className="space-y-6">
+          {arcos.length === 0 && (
+            <p className="text-sm text-text-secondary">Todavía no tienes arcos argumentales registrados</p>
+          )}
+          {SECCIONES.map(({ tipo, titulo }) => {
+            const arcosDelTipo = arcos.filter(a => a.tipo === tipo)
+            if (arcosDelTipo.length === 0) return null
+
+            return (
+              <SeccionColapsable key={tipo} titulo={`${titulo} (${arcosDelTipo.length})`} abiertoPorDefecto={false}>
+                <Parrilla
+                  items={arcosDelTipo}
+                  keyExtractor={(arco) => arco.id}
+                  anchoMinimo="220px"
+                  renderItem={(arco) => (
+                    <TarjetaInfo
+                      nombre={arco.nombre}
+                      subtitulo={arco.nombreOriginal}
+                      meta={metaArco(arco)}
+                      descripcion={arco.descripcion}
+                      seleccionado={seleccionado === arco.id}
+                      onClick={() => handleSeleccionar(arco)}
+                    />
+                  )}
+                />
+              </SeccionColapsable>
+            )
+          })}
+        </div>
       )}
 
       {error && <MensajeError className="mt-6" codigo={error.codigo} mensaje={error.mensaje} />}

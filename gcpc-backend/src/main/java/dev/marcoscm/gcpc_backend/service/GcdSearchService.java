@@ -5,6 +5,7 @@ import dev.marcoscm.gcpc_backend.persistence.entity.GcdIssueEntity;
 import dev.marcoscm.gcpc_backend.persistence.repository.ComicRepository;
 import dev.marcoscm.gcpc_backend.persistence.repository.GcdIssueRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 @Service
@@ -36,6 +37,20 @@ public class GcdSearchService {
         return gcdIssueRepository.buscarPorRango(serie, desde, hasta).stream().map(issue -> new ComicSearchResultDto(
                 issue.getId(), serie, issue.getNumber(), issue.getTitle(), anioDe(issue), !comicRepository.findByGcdIssueId(issue.getId()).isEmpty()
         ) ).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ComicSearchResultDto> buscarPorEtapa(Integer etapaId) {
+        return gcdIssueRepository.buscarPorEtapa(etapaId).stream()
+                .map(issue -> new ComicSearchResultDto(
+                        issue.getId(),
+                        issue.getSeries().getName(),
+                        issue.getNumber(),
+                        issue.getTitle(),
+                        anioDe(issue),
+                        !comicRepository.findByGcdIssueId(issue.getId()).isEmpty()
+                ))
+                .toList();
     }
 
     private Integer anioDe(GcdIssueEntity issue) {

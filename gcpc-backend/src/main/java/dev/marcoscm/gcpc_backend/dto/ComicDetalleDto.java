@@ -10,7 +10,7 @@ public record ComicDetalleDto(
         Integer ranking,
         String notas,
         String coverPath,
-        EtapaResumenDto etapa,
+        List<EtapaResumenDto> etapas,
         List<PersonaConRolDto>personas,
         List<PersonajeResumenDto>personajes,
         List<EstiloResumenDto>estilos,

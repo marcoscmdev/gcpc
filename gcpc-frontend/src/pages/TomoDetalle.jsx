@@ -4,6 +4,8 @@ import { API_URL } from '../config.js'
 import { TituloPagina } from '../components/TituloPagina.jsx'
 import { Panel } from '../components/Panel.jsx'
 import { MensajeError } from '../components/MensajeError.jsx'
+import { Estrellas } from '../components/Estrellas.jsx'
+import { ListaPersonajes } from '../components/ListaPersonajes.jsx'
 
 function manejarRespuesta(response) {
   if (!response.ok) {
@@ -63,7 +65,7 @@ function TomoDetalle() {
             {tomo.isbn && <p>ISBN: <span className="text-text">{tomo.isbn}</span></p>}
             <p>Notas: <span className="text-text">{tomo.notas}</span></p>
             <p>Curiosidades: <span className="text-text">{tomo.curiosidades}</span></p>
-            <p>Puntuación: <span className="text-text">{tomo.ranking}</span></p>
+            <p>Puntuación: <Estrellas valor={tomo.ranking} /></p>
           </div>
         </div>
       </Panel>
@@ -85,7 +87,7 @@ function TomoDetalle() {
                 <div className="mt-1 space-y-1 text-base text-text-secondary">
                   <p>Año: {comic.anho ? comic.anho : 'Año sin especificar'}</p>
 
-                  {comic.etapa && <p>Etapa: {comic.etapa.nombre}</p>}
+                  {comic.etapas.length > 0 && <p>Etapa{comic.etapas.length > 1 ? 's' : ''}: {comic.etapas.map(e => e.nombre).join(', ')}</p>}
 
                   {comic.arcos.length > 0 && (
                     <p>Arco{comic.arcos.length > 1 ? 's' : ''}: {comic.arcos.map(a => a.nombre).join(', ')}</p>
@@ -99,9 +101,7 @@ function TomoDetalle() {
                     <p>Autores: {comic.personas.map(p => `${p.nombre} (${p.rol})`).join(', ')}</p>
                   )}
 
-                  {comic.personajes.length > 0 && (
-                    <p>Personajes: {comic.personajes.map(p => p.nombre).join(', ')}</p>
-                  )}
+                  <ListaPersonajes personajes={comic.personajes} />
 
                   {comic.notas && <p>Notas: {comic.notas}</p>}
                 </div>

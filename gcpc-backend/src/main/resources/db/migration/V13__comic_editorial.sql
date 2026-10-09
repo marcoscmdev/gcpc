@@ -1,0 +1,1 @@
+ALTER TABLE mi_comic ADD COLUMN editorial VARCHAR(100) NULL;

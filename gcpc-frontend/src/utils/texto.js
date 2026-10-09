@@ -7,4 +7,11 @@ function slugificar(texto) {
     .replace(/^-+|-+$/g, '')
 }
 
-export { slugificar }
+function normalizar(texto) {
+  return (texto ?? '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+}
+
+export { slugificar, normalizar }

@@ -13,7 +13,7 @@ function TarjetaCircular({ imagen, alt, nombre, seleccionado, onClick, IconoResp
       className="group flex w-full flex-col items-center gap-2 text-center"
     >
       <span
-        className={`flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-2 transition group-hover:scale-110 ${
+        className={`flex h-20 w-20 sm:h-24 sm:w-24 items-center justify-center overflow-hidden rounded-full border-2 transition group-hover:scale-110 ${
           seleccionado
             ? 'border-accent-hover bg-banner'
             : 'border-border bg-surface hover:border-accent-hover'

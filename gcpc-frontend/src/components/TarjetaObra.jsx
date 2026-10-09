@@ -6,7 +6,7 @@ function TarjetaObra({ imagen, alt, titulo, subtitulo, enlace, tipo }) {
   return (
     <Link
       to={enlace}
-      className="block rounded-xl border-2 border-transparent bg-banner p-4 transition hover:scale-[1.02] hover:border-accent-hover"
+      className="block rounded-xl border-2 border-transparent bg-banner p-2 transition sm:p-4 hover:scale-[1.02] hover:border-accent-hover"
     >
       {tipo && (
         <span
@@ -26,7 +26,7 @@ function TarjetaObra({ imagen, alt, titulo, subtitulo, enlace, tipo }) {
         className="aspect-[2/3] w-full rounded-lg object-cover"
       />
 
-      <h3 className="mt-3 truncate font-display text-lg font-bold text-text">{titulo}</h3>
+      <h3 className="mt-2 truncate font-display text-base sm:mt-3 sm:text-lg font-bold text-text">{titulo}</h3>
       {subtitulo && <p className="truncate text-sm text-text-secondary">{subtitulo}</p>}
     </Link>
   )

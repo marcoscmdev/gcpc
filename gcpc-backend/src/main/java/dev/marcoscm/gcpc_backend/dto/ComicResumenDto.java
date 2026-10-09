@@ -11,7 +11,8 @@ public record ComicResumenDto(
         String notas,
         Integer orden,
         String coverPath,
-        EtapaResumenDto etapa,
-        List<PersonaConRolDto>personas
+        List<EtapaResumenDto> etapas,
+        List<PersonaConRolDto>personas,
+        boolean esGrapa
 ) {
 }

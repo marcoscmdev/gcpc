@@ -56,6 +56,8 @@ function Estilos() {
     setBuscado(false)
   }
 
+  const estiloSeleccionado = estilos.find(e => e.id === seleccionado)
+
   return (
     <div>
       <TituloPagina
@@ -63,31 +65,44 @@ function Estilos() {
         descripcion="Encuentra ejemplares por estilo de dibujo."
       />
 
-      <Panel titulo="Selecciona un estilo">
-        <Parrilla
-          items={estilos}
-          keyExtractor={(estilo) => estilo.id}
-          anchoMinimo="100px"
-          mensajeVacio="Todavía no tienes estilos registrados"
-          renderItem={(estilo) => (
+      {!seleccionado && (
+        <Panel titulo="Selecciona un estilo">
+          <Parrilla
+            items={estilos}
+            keyExtractor={(estilo) => estilo.id}
+            circular
+            mensajeVacio="Todavía no tienes estilos registrados"
+            renderItem={(estilo) => (
+              <TarjetaCircular
+                imagen={`/img/estilos/${slugificar(estilo.nombre)}.jpg`}
+                alt={estilo.nombre}
+                nombre={estilo.nombre}
+                seleccionado={seleccionado === estilo.id}
+                onClick={() => handleSeleccionar(estilo)}
+                IconoRespaldo={Palette}
+              />
+            )}
+          />
+        </Panel>
+      )}
+
+      {error && <MensajeError className="mt-6" codigo={error.codigo} mensaje={error.mensaje} />}
+
+      {estiloSeleccionado && (
+        <Panel className="mt-6">
+          <div className="w-28">
             <TarjetaCircular
-              imagen={`/img/estilos/${slugificar(estilo.nombre)}.jpg`}
-              alt={estilo.nombre}
-              nombre={estilo.nombre}
-              seleccionado={seleccionado === estilo.id}
-              onClick={() => handleSeleccionar(estilo)}
+              imagen={`/img/estilos/${slugificar(estiloSeleccionado.nombre)}.jpg`}
+              alt={estiloSeleccionado.nombre}
+              nombre={estiloSeleccionado.nombre}
+              seleccionado
               IconoRespaldo={Palette}
             />
-          )}
-        />
-
-        {seleccionado && (
+          </div>
           <Boton className="mt-4" onClick={handleQuitarSeleccion}>Quitar selección</Boton>
-        )}
-
-        {cargando && <p className="mt-4 text-sm text-text-secondary">Buscando...</p>}
-        {error && <MensajeError className="mt-4" codigo={error.codigo} mensaje={error.mensaje} />}
-      </Panel>
+          {cargando && <p className="mt-4 text-sm text-text-secondary">Buscando...</p>}
+        </Panel>
+      )}
 
       {buscado && !cargando && (
         <div className="mt-6">

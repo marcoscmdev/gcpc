@@ -12,7 +12,4 @@ public interface ComicArcoRepository extends ListCrudRepository<ComicArcoEntity,
     List<ComicArcoEntity> findByArco_Id(Integer arcoId);
     @Query("SELECT ca FROM ComicArcoEntity ca JOIN FETCH ca.arco WHERE ca.comic.id = :comicId")
     List<ComicArcoEntity> findByComicIdConArco(@Param("comicId") Integer comicId);
-
-    @Query("SELECT ca FROM ComicArcoEntity ca JOIN FETCH ca.comic WHERE ca.arco.nombre LIKE %:nombre%")
-    List<ComicArcoEntity> findByArcoNombreConComic(@Param("nombre") String nombre);
 }

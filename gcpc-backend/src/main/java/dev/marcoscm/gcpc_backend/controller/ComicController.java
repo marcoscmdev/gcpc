@@ -1,5 +1,6 @@
 package dev.marcoscm.gcpc_backend.controller;
 
+import dev.marcoscm.gcpc_backend.dto.ComicConTomoDto;
 import dev.marcoscm.gcpc_backend.dto.ComicDetalleDto;
 import dev.marcoscm.gcpc_backend.dto.ComicResumenDto;
 import dev.marcoscm.gcpc_backend.service.ComicService;
@@ -22,7 +23,12 @@ public class ComicController {
 
     @GetMapping
     public List<ComicResumenDto> getAll() {
-        return comicService.findAllConEtapa();
+        return comicService.findAll();
+    }
+
+    @GetMapping("/duplicados")
+    public List<ComicConTomoDto> getDuplicados() {
+        return comicService.getDuplicados();
     }
 
     @GetMapping("/{idComic}")

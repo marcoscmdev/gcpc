@@ -4,6 +4,8 @@ import { API_URL } from '../config.js'
 import { TituloPagina } from '../components/TituloPagina.jsx'
 import { Panel } from '../components/Panel.jsx'
 import { MensajeError } from '../components/MensajeError.jsx'
+import { Estrellas } from '../components/Estrellas.jsx'
+import { ListaPersonajes } from '../components/ListaPersonajes.jsx'
 
 function manejarRespuesta(response) {
   if (!response.ok) {
@@ -59,8 +61,8 @@ function ComicDetalle() {
 
           <div className="space-y-2 text-base text-text-secondary">
             <p>Año: <span className="text-text">{comic.anho ? comic.anho : 'Año sin especificar'}</span></p>
-            {comic.etapa && <p>Etapa: <span className="text-text">{comic.etapa.nombre}</span></p>}
-            <p>Puntuación: <span className="text-text">{comic.ranking ?? 'Sin puntuar'}</span></p>
+            {comic.etapas.length > 0 && <p>Etapa{comic.etapas.length > 1 ? 's' : ''}: <span className="text-text">{comic.etapas.map(e => e.nombre).join(', ')}</span></p>}
+            <p>Puntuación: <Estrellas valor={comic.ranking} /></p>
             <p>Notas: <span className="text-text">{comic.notas || 'Sin notas'}</span></p>
 
             {comic.arcos.length > 0 && (
@@ -75,9 +77,7 @@ function ComicDetalle() {
               <p>Autores: <span className="text-text">{comic.personas.map(p => `${p.nombre} (${p.rol})`).join(', ')}</span></p>
             )}
 
-            {comic.personajes.length > 0 && (
-              <p>Personajes: <span className="text-text">{comic.personajes.map(p => p.nombre).join(', ')}</span></p>
-            )}
+            <ListaPersonajes personajes={comic.personajes} destacarNombres />
           </div>
         </div>
       </Panel>

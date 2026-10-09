@@ -11,7 +11,7 @@ public record ComicDeTomoDto(
         String notas,
         Integer orden,
         String coverPath,
-        EtapaResumenDto etapa,
+        List<EtapaResumenDto> etapas,
         List<PersonaConRolDto> personas,
         List<PersonajeResumenDto> personajes,
         List<EstiloResumenDto> estilos,

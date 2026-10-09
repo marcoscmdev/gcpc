@@ -11,6 +11,7 @@ import dev.marcoscm.gcpc_backend.dto.TomoResumenDto;
 import dev.marcoscm.gcpc_backend.persistence.entity.TomoEntity;
 import dev.marcoscm.gcpc_backend.persistence.repository.ComicArcoRepository;
 import dev.marcoscm.gcpc_backend.persistence.repository.ComicEstiloRepository;
+import dev.marcoscm.gcpc_backend.persistence.repository.ComicEtapaRepository;
 import dev.marcoscm.gcpc_backend.persistence.repository.ComicPersonajeRepository;
 import dev.marcoscm.gcpc_backend.persistence.repository.ComicPersonaRepository;
 import dev.marcoscm.gcpc_backend.persistence.repository.ComicRepository;
@@ -30,11 +31,12 @@ public class TomoService {
     private final ComicPersonajeRepository comicPersonajeRepository;
     private final ComicEstiloRepository comicEstiloRepository;
     private final ComicArcoRepository comicArcoRepository;
+    private final ComicEtapaRepository comicEtapaRepository;
 
     public TomoService(ComicRepository comicRepository, TomoRepository tomoRepository,
                        ComicTomoRepository comicTomoRepository, ComicPersonaRepository comicPersonaRepository,
                        ComicPersonajeRepository comicPersonajeRepository, ComicEstiloRepository comicEstiloRepository,
-                       ComicArcoRepository comicArcoRepository) {
+                       ComicArcoRepository comicArcoRepository, ComicEtapaRepository comicEtapaRepository) {
         this.comicRepository = comicRepository;
         this.tomoRepository = tomoRepository;
         this.comicTomoRepository = comicTomoRepository;
@@ -42,6 +44,7 @@ public class TomoService {
         this.comicPersonajeRepository = comicPersonajeRepository;
         this.comicEstiloRepository = comicEstiloRepository;
         this.comicArcoRepository = comicArcoRepository;
+        this.comicEtapaRepository = comicEtapaRepository;
     }
 
     private List<PersonaConRolDto> getPersonasDeComic(Integer comicId) {
@@ -59,6 +62,12 @@ public class TomoService {
     private List<EstiloResumenDto> getEstilosDeComic(Integer comicId) {
         return comicEstiloRepository.findByComicIdConEstilo(comicId).stream()
                 .map(cp -> new EstiloResumenDto(cp.getEstiloId(), cp.getEstilo().getNombre()))
+                .toList();
+    }
+
+    private List<EtapaResumenDto> getEtapasDeComic(Integer comicId) {
+        return comicEtapaRepository.findByComicIdConEtapa(comicId).stream()
+                .map(ce -> new EtapaResumenDto(ce.getEtapaId(), ce.getEtapa().getNombre(), ce.getEtapa().getAnhoInicio(), ce.getEtapa().getAnhoFin(), ce.getEtapa().getTipo()))
                 .toList();
     }
 
@@ -90,9 +99,7 @@ public class TomoService {
                         ct.getComic().getNotas(),
                         ct.getOrden(),
                         ct.getComic().getCoverPath(),
-                        ct.getComic().getEtapa() != null
-                                ? new EtapaResumenDto(ct.getComic().getEtapa().getId(), ct.getComic().getEtapa().getNombre(), ct.getComic().getEtapa().getAnhoInicio(), ct.getComic().getEtapa().getAnhoFin())
-                                : null,
+                        getEtapasDeComic(ct.getComic().getId()),
                         getPersonasDeComic(ct.getComic().getId()),
                         getPersonajesDeComic(ct.getComic().getId()),
                         getEstilosDeComic(ct.getComic().getId()),

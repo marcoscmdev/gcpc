@@ -84,7 +84,7 @@ function Personajes() {
                 <Parrilla
                   items={personajesDelTipo}
                   keyExtractor={(personaje) => personaje.id}
-                  anchoMinimo="100px"
+                  circular
                   mensajeVacio="Todavía no tienes personajes registrados"
                   renderItem={(personaje) => (
                     <TarjetaCircular

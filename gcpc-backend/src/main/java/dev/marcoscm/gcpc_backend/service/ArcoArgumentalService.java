@@ -9,6 +9,7 @@ import dev.marcoscm.gcpc_backend.persistence.entity.ComicArcoEntity;
 import dev.marcoscm.gcpc_backend.persistence.entity.ComicEntity;
 import dev.marcoscm.gcpc_backend.persistence.repository.ArcoArgumentalRepository;
 import dev.marcoscm.gcpc_backend.persistence.repository.ComicArcoRepository;
+import dev.marcoscm.gcpc_backend.persistence.repository.ComicRepository;
 import dev.marcoscm.gcpc_backend.persistence.repository.ComicTomoRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +20,12 @@ public class ArcoArgumentalService {
     private final ArcoArgumentalRepository arcoArgumentalRepository;
     private final ComicArcoRepository comicArcoRepository;
     private final ComicTomoRepository comicTomoRepository;
+    private final ComicRepository comicRepository;
 
     public ArcoArgumentalService(ArcoArgumentalRepository arcoArgumentalRepository,
-                                 ComicArcoRepository comicArcoRepository, ComicTomoRepository comicTomoRepository) {
+                                 ComicArcoRepository comicArcoRepository, ComicTomoRepository comicTomoRepository,
+                                 ComicRepository comicRepository) {
+        this.comicRepository = comicRepository;
         this.arcoArgumentalRepository = arcoArgumentalRepository;
         this.comicArcoRepository = comicArcoRepository;
         this.comicTomoRepository = comicTomoRepository;
@@ -46,9 +50,9 @@ public class ArcoArgumentalService {
         return new ComicConTomoDto(comic.getId(), comic.getNombre(), comic.getNumero(), comic.getAnho(), comic.getCoverPath(), List.of(), tomos);
     }
 
-    public List<ComicConTomoDto> buscarComicsPorArco(String nombre) {
-        return comicArcoRepository.findByArcoNombreConComic(nombre).stream()
-                .map(ca -> mapComicConTomo(ca.getComic()))
+    public List<ComicConTomoDto> buscarComicsPorArco(Integer arcoId) {
+        return comicRepository.findByArcoIdConSubarcos(arcoId).stream()
+                .map(this::mapComicConTomo)
                 .toList();
     }
 

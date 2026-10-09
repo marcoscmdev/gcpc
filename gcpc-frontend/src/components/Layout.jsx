@@ -1,11 +1,12 @@
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import escudo from '../assets/gcpc_escudo.svg'
 import { Nav } from './Nav.jsx'
 
 function Layout() {
   return (
     <div className="flex min-h-screen flex-col font-sans">
-      <header className="bg-banner flex items-center gap-4 px-6 py-5">
+      <header className="bg-banner">
+        <Link to="/" aria-label="Ir al inicio" className="flex items-center gap-4 px-6 py-5">
         <img src={escudo} alt="Escudo GCPC" className="h-[110px] w-auto" />
         <div className="text-left">
           <h1 className="font-display text-4xl font-bold tracking-wide text-text sm:text-5xl">
@@ -15,9 +16,10 @@ function Layout() {
             GOTHAM CITY PERSONAL COLLECTION
           </h2>
         </div>
+        </Link>
       </header>
 
-      <main className="mx-auto w-full max-w-7xl flex-1 px-6 pb-28 pt-6">
+      <main className="mx-auto w-full max-w-[1800px] flex-1 px-6 pb-28 pt-6">
         <Outlet />
       </main>
 

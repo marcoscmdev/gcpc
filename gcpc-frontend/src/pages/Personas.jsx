@@ -6,6 +6,7 @@ import { Panel } from '../components/Panel.jsx'
 import { Campo } from '../components/Campo.jsx'
 import { Boton } from '../components/Boton.jsx'
 import { MensajeError } from '../components/MensajeError.jsx'
+import { normalizar } from '../utils/texto.js'
 
 const ROLES = [
   { valor: 'GUION', etiqueta: 'Guionista' },
@@ -45,7 +46,7 @@ function Personas() {
 
   const sugerencias = texto
     ? personas.filter(persona =>
-        persona.nombre.toLowerCase().includes(texto.toLowerCase())
+        normalizar(persona.nombre).includes(normalizar(texto))
       )
     : []
 

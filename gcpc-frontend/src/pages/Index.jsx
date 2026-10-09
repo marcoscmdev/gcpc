@@ -6,13 +6,16 @@ import { TarjetaComic } from "../components/TarjetaComic.jsx";
 import { TituloPagina } from "../components/TituloPagina.jsx";
 import { Panel } from "../components/Panel.jsx";
 import { Campo } from "../components/Campo.jsx";
+import { Boton } from "../components/Boton.jsx";
 import { MensajeError } from "../components/MensajeError.jsx";
+import { normalizar } from "../utils/texto.js";
 
 function Index() {
   const [tomos, setTomos] = useState([]);
   const [comics, setComics] = useState([]);
 
   const [busqueda, setBusqueda] = useState("");
+  const [mostrarTodo, setMostrarTodo] = useState(false);
   const [cargandoTomos, setCargandoTomos] = useState(true);
   const [cargandoComics, setCargandoComics] = useState(true);
   const [error, setError] = useState(null);
@@ -29,11 +32,14 @@ function Index() {
   }
 
   const resultadoTomos = tomos.filter((tomo) =>
-    tomo.nombre.toLowerCase().includes(busqueda.toLowerCase()),
+    normalizar(tomo.nombre).includes(normalizar(busqueda)),
   );
-  const resultadoComics = comics.filter((comic) =>
-    comic.nombre.toLowerCase().includes(busqueda.toLowerCase()),
+  const resultadoComics = comics.filter(
+    (comic) => comic.esGrapa && normalizar(comic.nombre).includes(normalizar(busqueda)),
   );
+
+  const tomosPorFecha = [...tomos].sort((a, b) => b.id - a.id);
+  const grapasPorFecha = comics.filter((comic) => comic.esGrapa).sort((a, b) => b.id - a.id);
 
   useEffect(() => {
     fetch(`${API_URL}/api/tomos`)
@@ -83,7 +89,7 @@ function Index() {
           </section>
 
           <section>
-            <h2 className="font-display text-xl text-text mb-3">Cómics</h2>
+            <h2 className="font-display text-xl text-text mb-3">Grapas</h2>
             <Parrilla
               items={resultadoComics}
               keyExtractor={(comic) => comic.id}
@@ -99,9 +105,12 @@ function Index() {
           <hr className="my-8 border-border" />
 
           <section>
-            <h2 className="font-display text-xl text-text mb-3">Últimos tomos añadidos</h2>
+            <h2 className="font-display text-xl text-text mb-3">
+              {mostrarTodo ? `Todos los tomos (${tomos.length})` : "Últimos tomos añadidos"}
+            </h2>
             <Parrilla
-              items={tomos.slice(0, 3)}
+              centrado={!mostrarTodo}
+              items={mostrarTodo ? tomosPorFecha : tomosPorFecha.slice(0, 3)}
               keyExtractor={(tomo) => tomo.id}
               renderItem={(tomo) => <TarjetaTomo tomo={tomo} />}
               mensajeVacio="Todavía no tienes tomos en la colección"
@@ -109,14 +118,23 @@ function Index() {
           </section>
 
           <section className="mt-8">
-            <h2 className="font-display text-xl text-text mb-3">Últimas grapas añadidas</h2>
+            <h2 className="font-display text-xl text-text mb-3">
+              {mostrarTodo ? `Todas las grapas (${grapasPorFecha.length})` : "Últimas grapas añadidas"}
+            </h2>
             <Parrilla
-              items={comics.slice(0, 3)}
+              centrado={!mostrarTodo}
+              items={mostrarTodo ? grapasPorFecha : grapasPorFecha.slice(0, 3)}
               keyExtractor={(comic) => comic.id}
               renderItem={(comic) => <TarjetaComic comic={comic} />}
               mensajeVacio="Todavía no tienes grapas en la colección"
             />
           </section>
+
+          <div className="mt-8 flex justify-center">
+            <Boton onClick={() => setMostrarTodo((valor) => !valor)}>
+              {mostrarTodo ? "Mostrar menos" : "Mostrar todo"}
+            </Boton>
+          </div>
         </>
       )}
     </div>

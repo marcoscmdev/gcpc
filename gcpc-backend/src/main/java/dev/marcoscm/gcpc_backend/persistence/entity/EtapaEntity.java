@@ -22,5 +22,8 @@ public class EtapaEntity {
     private Integer anhoInicio;
     @Column(name = "anio_fin", columnDefinition = "SMALLINT")
     private Integer anhoFin;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private TipoEtapa tipo;
 
 }

@@ -12,9 +12,11 @@ public interface ComicTomoRepository extends ListCrudRepository<ComicTomoEntity,
 
     @Query("SELECT ct FROM ComicTomoEntity ct " +
             "JOIN FETCH ct.comic c " +
-            "LEFT JOIN FETCH c.etapa " +
             "WHERE ct.tomo.id = :tomoId ORDER BY ct.orden")
     List<ComicTomoEntity> findByTomoIdOrdenado(@Param("tomoId") Integer tomoId);
+
+    @Query("SELECT ct FROM ComicTomoEntity ct JOIN FETCH ct.comic JOIN FETCH ct.tomo")
+    List<ComicTomoEntity> findAllConComicYTomo();
 
     @Query("SELECT ct FROM ComicTomoEntity ct JOIN FETCH ct.tomo WHERE ct.comic.id = :comicId")
     List<ComicTomoEntity> findByComicIdConTomo(@Param("comicId") Integer comicId);
